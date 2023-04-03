@@ -37,7 +37,7 @@ ffa8b034-3fc6-496e-aa02-3e0e56ad7ab7 (text)
   0. AAA
   0. BBB
 0. 지금 이 부분은 bulleted_list 
-![](/asset)
+![](/assets/95473e9f-a2ab-4f0c-8115-21810a961f4f.png)
  [https://oss.navercorp.com/npp/npp/issues/3613](https://oss.navercorp.com/npp/npp/issues/3613)
  `+a`
 ```yaml
