@@ -20,7 +20,7 @@ timezone: Asia/Seoul
 
 title: shinychan95 # the main title
 
-tagline: 언제 죽더라도 후회 없도록 부끄럽지 않은 것들을 더 남기고 싶다. </br> - 류이치 사카모토 - # it will display as the sub-title 
+tagline: 언제 죽더라도 후회 없도록,</br>부끄럽지 않은 것들을 더 남기고 싶다.</br>- Ryuichi Sakamoto # it will display as the sub-title 
 
 description: >- # used by seo meta and the atom feed
   언젠가 굵직한 가치관이 생기면 적도록 하자.
@@ -47,7 +47,7 @@ social:
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
 
-google_site_verification: # fill in to your verification string
+google_site_verification: U8YpJKvCfXvWsbMZkgZlDJ6432F0qnUF9Ao74wFpG88
 
 # ↑ --------------------------
 # The end of `jekyll-seo-tag` settings
