@@ -10,7 +10,9 @@ _( 본 글은 네이버 사내 스터디 오프라인 세미나 준비를 하면
 <br/>
 
 결과물 링크 - [https://github.com/shinychan95/make-notion-blog](https://github.com/shinychan95/make-notion-blog)
+
 ---
+
 ## 주제를 정한 목적
 > 🦖 _흥미롭고 유익하고 관심을 끌만한 주제는 무엇이 있을까?_
 
@@ -45,7 +47,9 @@ _( 본 글은 네이버 사내 스터디 오프라인 세미나 준비를 하면
 _만약 이것이 가능하다면, 꽤나 네이버 내에서 유용한 공유가 되지 않을까 싶다…!_
 <br/>
 
+
 ---
+
 ## lsof 명령어를 통해 노션 캐시 데이터를 찾을 수 없을까?
 참고 자료 : [https://www.lesstif.com/system-admin/lsof-20776078.html](https://www.lesstif.com/system-admin/lsof-20776078.html)
 > 🦖 `lsof` 명령어를 활용하여 Notion과 관련되어 열려 있는 파일 목록들을 모두 살펴볼 수 있다.
@@ -111,7 +115,9 @@ Notion    62736 user  txt       REG               1,18    108608            5460
    ```
    <br/>
 
+
 ---
+
 ## 인터넷 망령 모드 시작
 ### Notion 의 offline 모드에 대해 검색
 ~~[https://notionzen.com/notion-offline/](https://notionzen.com/notion-offline/)~~
@@ -130,7 +136,9 @@ Notion    62736 user  txt       REG               1,18    108608            5460
    - ‣ 
 <br/>
 
+
 ---
+
 ## 인터넷 망령 모드 이어서
 ### indexdDB 에 코드 레벨로 접근할 수 없을까?
 ~~[https://web.dev/indexeddb/](https://web.dev/indexeddb/)~~
@@ -151,7 +159,9 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 ⭐️ **조력자의 등장** ⭐️ → ‣ 
 <br/>
 
+
 ---
+
 ## Notion 데이터 모델 분석
 ### **Block basics**
 ![](/assets/pages/1eafdee6-189c-46fe-a0fe-5bff83f07309/188c99c2-d7a1-42f3-922f-76351b5f1ab4.png)
@@ -196,7 +206,9 @@ Notion    62736 user  txt       REG               1,18    108608            5460
    - 이후 Notion API 를 통해서 version 을 비교하여, outdated 인 경우 re-rendering.
 <br/>
 
+
 ---
+
 ## 드디어 local cache 데이터, 눈 앞에 오다
 ![](/assets/pages/1eafdee6-189c-46fe-a0fe-5bff83f07309/2456a53a-1772-450c-ba2c-d911c909f1d7.png)
 ![](/assets/pages/1eafdee6-189c-46fe-a0fe-5bff83f07309/61efae01-695d-4861-bc0d-0f3ce58729e0.png)
@@ -208,7 +220,9 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 
 <br/>
 
+
 ---
+
 ## ⭐️ 조력자 ⭐️ GPT-4 홍보를 시작합니다.
 > 🦖 **대부분의  막히는 부분에 대한 해결도 기능에 대한 코드 작성도 모두 ChatGPT 가 수행하였습니다.**
 
