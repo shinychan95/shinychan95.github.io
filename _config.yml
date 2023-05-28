@@ -86,15 +86,13 @@ avatar: /assets/img/chanyoung.jpg
 toc: true
 
 comments:
-  active: # The global switch for posts comments, e.g., 'disqus'.  Keep it empty means disable
-  # The active options are as follows:
+  active: utterances
   disqus:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
   utterances:
-    repo: "shinychan95/shinychan95.github.io"
-    issue_term: "title"
-    label: "post"
+    repo: shinychan95/shinychan95.github.io
+    issue_term: title
   # Giscus options › https://giscus.app
   giscus:
     repo: # <gh-username>/<repo>
