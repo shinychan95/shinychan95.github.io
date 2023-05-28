@@ -93,6 +93,7 @@ comments:
   utterances:
     repo: shinychan95/shinychan95.github.io
     issue_term: title
+    label: post
   # Giscus options › https://giscus.app
   giscus:
     repo: # <gh-username>/<repo>
