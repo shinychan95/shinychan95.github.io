@@ -20,7 +20,7 @@ tags: []
 
 
 
-### 원인 (Xcode 업데이트로 인한 버전 이슈)
+<h3 id="원인-xcode-업데이트로-인한-버전-이슈">원인 (Xcode 업데이트로 인한 버전 이슈)</h3>
 > The toolchain may have been updated or changed. It's strongly advised to reset the CMake cache and reload the project. Reason: The previously configured CMAKE_OSX_ROOT '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk' is not available
 
 - 친절하게도 CLion 내 Notifications 를 살펴보면, `CMAKE_OSX_ROOT` 경로가 올바르지 못한 것을 확인할 수 있다.
@@ -52,7 +52,7 @@ lrwxr-xr-x  1 root  wheel   10  6 24 23:59 MacOSX13.sdk -> MacOSX.sdk
 
 
 
-### 해결 방법
+<h3 id="해결-방법">해결 방법</h3>
 (Settings → Build, Execution, Deployment → CMake) 내 **Cache variables** `CMAKE_OSX_SYSROOT` 경로가 잘못 명시되어 있으므로, 이 부분을 고쳐주면 된다.
 
 1. Cache 제거를 위해서 편리하게 cmake-build-debug 폴더를 모두 지운다.
@@ -99,7 +99,7 @@ $ ls -al | grep stdio.h
 
 
 
-### C 컴파일러(cc) 사용과 관련하여
+<h3 id="c-컴파일러cc-사용과-관련하여">C 컴파일러(cc) 사용과 관련하여</h3>
 > C 컴파일러에 대한 명세는 (Settings → Build, Execution, Deployment → Toolchains) 내 존재한다.
 
 <br/>
