@@ -18,7 +18,8 @@ _( 본 글은 네이버 사내 스터디 오프라인 세미나 준비를 하면
 ---
 
 
-<h2 id="주제를-정한-목적">주제를 정한 목적</h2>
+## 주제를 정한 목적
+
 > 🦖 _흥미롭고 유익하고 관심을 끌만한 주제는 무엇이 있을까?_
 
 - Notion 을 사용하고 있는 우리 _(특히 나…)_
@@ -42,7 +43,7 @@ _( 본 글은 네이버 사내 스터디 오프라인 세미나 준비를 하면
 
 
 
-<h3 id="얻어갈-수-있는-점">얻어갈 수 있는 점</h3>
+### 얻어갈 수 있는 점
 - 개념, 지식, 설명
 
 - 하나의 프로젝트 기반 결과물
@@ -54,7 +55,7 @@ _( 본 글은 네이버 사내 스터디 오프라인 세미나 준비를 하면
 
 
 
-<h3 id="결론적으로-주제는!-Notion-글,-버튼-하나로-블로그-배포-가능">**결론적으로 주제는! Notion 글, 버튼 하나로 블로그 배포 가능?**</h3>
+### **결론적으로 주제는! Notion 글, 버튼 하나로 블로그 배포 가능?**
 > **“가능하지 않다”** 라는 결론으로 귀결될 가능성이 크다.<br/><br/>하지만, 오프라인으로 동작하는 Notion 이기에, 로컬 내부 DB 에 접근하여 할 수 있지 않을까?<br/>(데이터 저장 형식은?)
 
 <br/>
@@ -83,7 +84,8 @@ _만약 이것이 가능하다면, 꽤나 네이버 내에서 유용한 공유�
 ---
 
 
-<h2 id="lsof-명령어를-통해-노션-캐시-데이터를-찾을-수-없을까">lsof 명령어를 통해 노션 캐시 데이터를 찾을 수 없을까?</h2>
+## lsof 명령어를 통해 노션 캐시 데이터를 찾을 수 없을까?
+
 참고 자료 : [https://www.lesstif.com/system-admin/lsof-20776078.html](https://www.lesstif.com/system-admin/lsof-20776078.html)
 
 > 🦖 `lsof` 명령어를 활용하여 Notion과 관련되어 열려 있는 파일 목록들을 모두 살펴볼 수 있다.
@@ -163,9 +165,10 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 ---
 
 
-<h2 id="인터넷-망령-모드-시작">인터넷 망령 모드 시작</h2>
+## 인터넷 망령 모드 시작
 
-<h3 id="Notion-의-offline-모드에-대해-검색">Notion 의 offline 모드에 대해 검색</h3>
+
+### Notion 의 offline 모드에 대해 검색
 ~~[https://notionzen.com/notion-offline/](https://notionzen.com/notion-offline/)~~
 
 - 기존에 offline으로도 Notion 사용을 했었고, 한번 봤던 페이지들은 로딩없이 보이길래, 어딘가에 다 저장하고 있는 줄 알았다.
@@ -179,7 +182,7 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 
 
 
-<h3 id="Notion-공식-블로그-내-데이터-모델-발견">Notion 공식 블로그 내 데이터 모델 발견</h3>
+### Notion 공식 블로그 내 데이터 모델 발견
 ~~[https://www.notion.so/blog/data-model-behind-notion](https://www.notion.so/blog/data-model-behind-notion)~~
 
 - 노션 내 정보는 어떤 제약이나 가두리가 존재하지 않는다.
@@ -202,9 +205,10 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 ---
 
 
-<h2 id="인터넷-망령-모드-이어서">인터넷 망령 모드 이어서</h2>
+## 인터넷 망령 모드 이어서
 
-<h3 id="indexdDB-에-코드-레벨로-접근할-수-없을까">indexdDB 에 코드 레벨로 접근할 수 없을까?</h3>
+
+### indexdDB 에 코드 레벨로 접근할 수 없을까?
 ~~[https://web.dev/indexeddb/](https://web.dev/indexeddb/)~~
 
 - ⭐️ **조력자의 등장** ⭐️ → ‣ 
@@ -244,9 +248,10 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 ---
 
 
-<h2 id="Notion-데이터-모델-분석">Notion 데이터 모델 분석</h2>
+## Notion 데이터 모델 분석
 
-<h3 id="Block-basics">**Block basics**</h3>
+
+### **Block basics**
 ![](/assets/pages/1eafdee6-189c-46fe-a0fe-5bff83f07309/188c99c2-d7a1-42f3-922f-76351b5f1ab4.png)
 - `ID`
 
@@ -281,7 +286,7 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 
 
 
-<h3 id="How-blocks-fit-together">How blocks fit together</h3>
+### How blocks fit together
 - 서로 다른 타입 간 `Turn into` 가능하다.
 
    - `Type` 과 `Property` 간 커플링이 존재하지 않아서 변환 및 렌더링에 문제없다.
@@ -299,7 +304,7 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 
 
 
-<h3 id="Life-of-a-block">Life of a block</h3>
+### Life of a block
 - 새로운 block 을 생성하거나 업데이트 하는 경우,
 
    - 해당 transaction 작업이 `local state` 에 반영
@@ -334,7 +339,8 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 ---
 
 
-<h2 id="드디어-local-cache-데이터,-눈-앞에-오다">드디어 local cache 데이터, 눈 앞에 오다</h2>
+## 드디어 local cache 데이터, 눈 앞에 오다
+
 ![](/assets/pages/1eafdee6-189c-46fe-a0fe-5bff83f07309/2456a53a-1772-450c-ba2c-d911c909f1d7.png)
 ![](/assets/pages/1eafdee6-189c-46fe-a0fe-5bff83f07309/61efae01-695d-4861-bc0d-0f3ce58729e0.png)
 **SQLite DB Location :  /Users/user/Library/Application Support/Notion/notion.db **
@@ -355,7 +361,8 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 ---
 
 
-<h2 id="⭐️-조력자-⭐️-GPT-4-홍보를-시작합니다.">⭐️ 조력자 ⭐️ GPT-4 홍보를 시작합니다.</h2>
+## ⭐️ 조력자 ⭐️ GPT-4 홍보를 시작합니다.
+
 > 🦖 **대부분의  막히는 부분에 대한 해결도 기능에 대한 코드 작성도 모두 ChatGPT 가 수행하였습니다.**
 
 <br/>
@@ -363,7 +370,7 @@ Notion    62736 user  txt       REG               1,18    108608            5460
 
 
 
-<h3 id="UUID-v4">UUID v4</h3>
+### UUID v4
 ```YAML
 Me : 
 UUID v4 로 ID 를 저장할 경우 데이터 조회 및 수정에 있어서 성능적 혹은 기타 장점이 있는거야?
@@ -408,7 +415,7 @@ UUID v4를 빠르게 조회하기 위한 성능 최적화 방법은 다양하게
 
 
 
-<h3 id="IndexedDB-→-SQLite">IndexedDB → SQLite</h3>
+### IndexedDB → SQLite
 ```YAML
 Me :
 너가 한 말 중에 "플랫폼에 따라 IndexedDB 또는 SQLite을 사용하여" 이 부분이 궁금한거야. 어떤 플랫폼에서는 IndexedDB 를 사용하고, 어떤 플랫폼에서는 SQLite 을 사용하는지 설명해줘.
@@ -450,7 +457,7 @@ ChatGPT :
 
 
 
-<h3 id="SQLite-Browser-및-코드-레벨-접근">SQLite Browser 및 코드 레벨 접근</h3>
+### SQLite Browser 및 코드 레벨 접근
 ```YAML
 Me :
 SQLite 도구는 어떤 것들이 있지? 혹시 Go 로 코드로 작성해서 cache 데이터에 접근할 수 없을까?
