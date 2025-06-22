@@ -6,6 +6,7 @@ categories: [Project]
 tags: [tool]
 ---
 
+[TOC]
 
 ---
 
@@ -51,29 +52,65 @@ tags: [tool]
 
 ## Strava | Running, Cycling & Hiking App
 
-      ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/edd101ac-c98f-4cf0-8770-b69a78c61ce4.png)
-      ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/34314327-0588-41d3-81f6-7a5836f31555.png)
-      ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/44a79ffa-91b4-4467-b218-afccdccc4756.png)
+
+<table>
+  <tr>
+    <td valign="top">
+
+![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/edd101ac-c98f-4cf0-8770-b69a78c61ce4.png)
+
+
+    </td>    <td valign="top">
+
+![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/34314327-0588-41d3-81f6-7a5836f31555.png)
+
+
+    </td>    <td valign="top">
+
+![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/44a79ffa-91b4-4467-b218-afccdccc4756.png)
 <br/>
 
 
 
-      ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/0bf32c51-6acb-41c7-82d5-9c85d3806fcc.png)
-      ### Strava 내 기능들
-      - **활동의 모든 측면을 추적 및 분석합니다.**
 
-      - 성과를 측정합니다.
 
-      - 친구와 연결하여 흥미진진한 경험을 공유하세요.
+    </td>
+  </tr>
+</table>
+<br/>
 
-      - 수십만 개의 클럽이 있고 계속 늘어나고 있습니다.
 
-      - Beacon을 사용하여 비상 시 실시간으로 위치를 공유할 수 있습니다.
 
-      - 멋진 경험을 혼자만 즐기지 말고 널리 알리세요.
 
-      - 새로운 경로를 탐색하고 글로벌 커뮤니티와 경쟁하세요.
+<table>
+  <tr>
+    <td valign="top">
 
+![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/0bf32c51-6acb-41c7-82d5-9c85d3806fcc.png)
+
+
+    </td>    <td valign="top">
+
+### Strava 내 기능들
+- **활동의 모든 측면을 추적 및 분석합니다.**
+
+- 성과를 측정합니다.
+
+- 친구와 연결하여 흥미진진한 경험을 공유하세요.
+
+- 수십만 개의 클럽이 있고 계속 늘어나고 있습니다.
+
+- Beacon을 사용하여 비상 시 실시간으로 위치를 공유할 수 있습니다.
+
+- 멋진 경험을 혼자만 즐기지 말고 널리 알리세요.
+
+- 새로운 경로를 탐색하고 글로벌 커뮤니티와 경쟁하세요.
+
+
+
+    </td>
+  </tr>
+</table>
 <br/>
 
 
@@ -232,6 +269,7 @@ tags: [tool]
 
 
 ### VPN
+> 🔗 [Routing your VPN network traffic | Apple Developer Documentation](https://developer.apple.com/documentation/networkextension/routing_your_vpn_network_traffic)
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/7328b6e0-5da0-416c-b930-02dfb52a8b0a.png)
 <br/>
 
