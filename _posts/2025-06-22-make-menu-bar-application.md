@@ -6,16 +6,33 @@ categories: [Project]
 tags: [tool]
 ---
 
-[TOC]
+- [**기(起)**](#기(起))
+  - [다들 안녕한 한주 보내셨나요?](#다들-안녕한-한주-보내셨나요)
+  - [Strava | Running, Cycling & Hiking App](#Strava--Running,-Cycling-&-Hiking-App)
+    - [Strava 내 기능들](#Strava-내-기능들)
+  - [해방합시다 탈출합시다](#해방합시다-탈출합시다)
+- [**승(承)**](#승(承))
+  - [탈출 시나리오 0 - MacOS Application](#탈출-시나리오-0---MacOS-Application)
+  - [탈출 시나리오 1 - 네트워크](#탈출-시나리오-1---네트워크)
+    - [대중적인 네트워크 인터페이스로부터 패킷을 가져온다. ](#대중적인-네트워크-인터페이스로부터-패킷을-가져온다.-)
+    - [VPN](#VPN)
+  - [탈출 시나리오 2 - 사용자 I/O](#탈출-시나리오-2---사용자-IO)
+- [**전(轉)**](#전(轉))
+  - [SwiftUI](#SwiftUI)
+  - [felizeter : Hello, World!](#felizeter--Hello,-World!)
+  - [felizeter : System Menu Bar App](#felizeter--System-Menu-Bar-App)
+  - [felizeter : User IO Monitoring](#felizeter--User-IO-Monitoring)
+  - [felizeter : Github Event Monitoring](#felizeter--Github-Event-Monitoring)
+- [**결(結)**](#결(結))
 
 ---
 
-# **기(起)**
 
+<h1 id="기(起)">**기(起)**</h1>
 > **‘일어날 기(起)’**, 시상을 일으키고 문제를 제기한다.
 
-## 다들 안녕한 한주 보내셨나요?
 
+<h2 id="다들-안녕한-한주-보내셨나요">다들 안녕한 한주 보내셨나요?</h2>
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/2893354b-4f3b-4a9a-921a-04663296b821.png)
 > “월요일부터 금요일까지 모두 정말로 고생하셨습니다🙂 즐거운 주말되세요🙋🏻‍♂️”<br/><br/>_(주말을 앞두고 팀 메신저 내 훈훈한 대화가 오고 간다)_
 
@@ -50,48 +67,22 @@ tags: [tool]
 
 
 
-## Strava | Running, Cycling & Hiking App
 
-
-<table>
-  <tr>
-    <td valign="top">
-
+<h2 id="Strava--Running,-Cycling-&-Hiking-App">Strava | Running, Cycling & Hiking App</h2>
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/edd101ac-c98f-4cf0-8770-b69a78c61ce4.png)
-
-
-    </td>    <td valign="top">
-
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/34314327-0588-41d3-81f6-7a5836f31555.png)
-
-
-    </td>    <td valign="top">
-
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/44a79ffa-91b4-4467-b218-afccdccc4756.png)
 <br/>
 
 
 
-
-
-    </td>
-  </tr>
-</table>
 <br/>
 
 
 
-
-<table>
-  <tr>
-    <td valign="top">
-
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/0bf32c51-6acb-41c7-82d5-9c85d3806fcc.png)
 
-
-    </td>    <td valign="top">
-
-### Strava 내 기능들
+<h3 id="Strava-내-기능들">Strava 내 기능들</h3>
 - **활동의 모든 측면을 추적 및 분석합니다.**
 
 - 성과를 측정합니다.
@@ -106,11 +97,6 @@ tags: [tool]
 
 - 새로운 경로를 탐색하고 글로벌 커뮤니티와 경쟁하세요.
 
-
-
-    </td>
-  </tr>
-</table>
 <br/>
 
 
@@ -137,8 +123,8 @@ tags: [tool]
 
 
 
-## 해방합시다 탈출합시다
 
+<h2 id="해방합시다-탈출합시다">해방합시다 탈출합시다</h2>
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/a89af6dc-fdd3-4c53-94fc-bf4166a42d08.png)
 > 두번째 세미나 발표를 앞두고, 어떤 발표가 재미있을까<br/><br/>**이창형이 발표한 그냥 재미있는 해킹<br/>뭔가 우리팀에 적용할 수도 있을 만한 LLVM**
 
@@ -173,16 +159,16 @@ tags: [tool]
 
 ---
 
-# **승(承)**
 
+<h1 id="승(承)">**승(承)**</h1>
 > **‘이을 승(承)’**, 기를 이어받아 이야기를 진행한다.
 
 <br/>
 
 
 
-## 탈출 시나리오 0 - MacOS Application
 
+<h2 id="탈출-시나리오-0---MacOS-Application">탈출 시나리오 0 - MacOS Application</h2>
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/3cf7dd56-b062-469a-97a5-3707e4baf994.png)
 예전부터 유용한 데스크톱 어플리케이션 혹은 모바일 위젯 기반 앱들을 사용하면서 너무 고마웠다.
 
@@ -220,8 +206,8 @@ tags: [tool]
 
 
 
-## 탈출 시나리오 1 - 네트워크
 
+<h2 id="탈출-시나리오-1---네트워크">탈출 시나리오 1 - 네트워크</h2>
 > 우리가 다루는 영역은 극히 Application
 
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/c7f6d3b8-5d0a-40f5-95b8-7bc62e58c582.png)
@@ -249,7 +235,8 @@ tags: [tool]
 
 
 
-### 대중적인 네트워크 인터페이스로부터 패킷을 가져온다. 
+
+<h3 id="대중적인-네트워크-인터페이스로부터-패킷을-가져온다.-">대중적인 네트워크 인터페이스로부터 패킷을 가져온다. </h3>
 > 패킷 스니핑 과정은 수집, 변환, 분석이라는 세 가지 단계로 나누어집니다.
 
 1. 수집
@@ -268,7 +255,8 @@ tags: [tool]
 
 
 
-### VPN
+
+<h3 id="VPN">VPN</h3>
 > 🔗 [Routing your VPN network traffic | Apple Developer Documentation](https://developer.apple.com/documentation/networkextension/routing_your_vpn_network_traffic)
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/7328b6e0-5da0-416c-b930-02dfb52a8b0a.png)
 <br/>
@@ -285,8 +273,8 @@ tags: [tool]
 
 
 
-## 탈출 시나리오 2 - 사용자 I/O
 
+<h2 id="탈출-시나리오-2---사용자-IO">탈출 시나리오 2 - 사용자 I/O</h2>
 ```Elixir
 MacOS 머신에서 키보드 입력과 같이 사용자의 IO가 입력되고 처리되는 과정은 꽤 복잡합니다. 이 과정은 기본적으로 다음과 같은 단계를 거치게 됩니다.
 
@@ -322,16 +310,16 @@ MacOS 머신에서 키보드 입력과 같이 사용자의 IO가 입력되고 �
 
 ---
 
-# **전(轉)**
 
+<h1 id="전(轉)">**전(轉)**</h1>
 > **‘구를 전(轉)’**, 장면과 시상을 새롭게 전환시키고, 결정적으로 방향을 한 번 전환하는 것을 말한다.
 
 <br/>
 
 
 
-## SwiftUI
 
+<h2 id="SwiftUI">SwiftUI</h2>
 > **만드는 입장에서 필요한 건 도구들**
 
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/638f3052-0ae7-4fcf-bede-50a405d97491.png)
@@ -391,8 +379,8 @@ SwiftUI는 Apple의 모든 플랫폼에서 작동하는 코드를 작성할 수 
 
 
 
-## felizeter : Hello, World!
 
+<h2 id="felizeter--Hello,-World!">felizeter : Hello, World!</h2>
 feliz + (power) meter 
 
 _죄송하지만, 코드로 봅시다._
@@ -401,16 +389,16 @@ _죄송하지만, 코드로 봅시다._
 
 
 
-## felizeter : System Menu Bar App
 
+<h2 id="felizeter--System-Menu-Bar-App">felizeter : System Menu Bar App</h2>
 <br/>
 
 
 
 _죄송하지만, 코드로 봅시다._
 
-## felizeter : User IO Monitoring
 
+<h2 id="felizeter--User-IO-Monitoring">felizeter : User IO Monitoring</h2>
 <br/>
 
 
@@ -421,8 +409,8 @@ _죄송하지만, 코드로 봅시다._
 
 
 
-## felizeter : Github Event Monitoring
 
+<h2 id="felizeter--Github-Event-Monitoring">felizeter : Github Event Monitoring</h2>
 <br/>
 
 
@@ -444,8 +432,8 @@ _죄송하지만, 코드로 봅시다._
 
 ---
 
-# **결(結)**
 
+<h1 id="결(結)">**결(結)**</h1>
 > **‘맺을 결(結)’**, 전체를 묶어 여운과 여정이 깃들도록 거두어 끝맺는다.
 
 ![](/assets/pages/4cdf849b-ae03-4dce-9b4b-44112cf59d62/b6194746-36b7-43af-b08a-172cabf181c6.png)
