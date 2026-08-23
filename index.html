@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500&family=Great+Vibes&display=swap">
 <link rel="preload" as="image" href="assets/illust.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
+<noscript><style>#prologue{display:none}[data-reveal],.fx{opacity:1!important;transform:none!important}#cover::before{display:none}#quicknav{opacity:1;pointer-events:auto}</style></noscript>
 
 <style>
   :root {
@@ -39,8 +40,10 @@
     --script: "Great Vibes", cursive;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-snap-type: y mandatory; }
-  html.locked, html.locked body { overflow: hidden; height: 100%; }
+  /* proximity: 챕터는 페이지 단위로 붙고, 사진관·안내처럼 긴 섹션은 자유 스크롤
+     (mandatory는 아코디언 등 레이아웃 변화 시 섹션 상단으로 재스냅하는 버그가 있음) */
+  html { scroll-snap-type: y proximity; }
+  html.locked { overflow: hidden; }
   body {
     background: var(--paper);
     color: var(--ink);
@@ -48,6 +51,7 @@
     font-weight: 300;
     line-height: 1.8;
     -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
   img { display: block; max-width: 100%; }
@@ -55,6 +59,7 @@
   a { color: inherit; text-decoration: none; }
 
   .pg {
+    min-height: 100vh;
     min-height: 100svh;
     scroll-snap-align: start;
     display: flex; flex-direction: column;
@@ -116,25 +121,25 @@
     100% { opacity: 1; filter: none; transform: none; }
   }
   .done .hw span { animation-duration: 0s !important; animation-delay: 0s !important; }
+  .done #openBtn, .done .front .arr { animation-delay: 0s !important; }
 
-  /* 펼치기 버튼 — 가는 밑줄이 그어지는 텍스트 버튼 */
+  /* 펼치기 버튼 — 잉크색 필 버튼 */
   #openBtn {
-    margin-top: 52px;
+    margin-top: 48px;
     opacity: 0;
-    position: relative;
-    font-family: var(--serif);
-    font-size: 15px; font-weight: 400;
-    letter-spacing: .3em; text-indent: .3em;
-    color: var(--ink);
-    padding: 10px 6px 14px;
+    pointer-events: none;
+    font-size: 14px; font-weight: 400;
+    letter-spacing: .18em; text-indent: .18em;
+    color: var(--paper);
+    background: var(--ink);
+    border-radius: 999px;
+    padding: 15px 40px;
+    box-shadow: 0 12px 28px -12px rgba(38, 34, 28, .5);
+    transition: transform .2s ease, box-shadow .2s ease;
   }
-  #openBtn::after {
-    content: ""; position: absolute; left: 8%; right: 8%; bottom: 6px;
-    height: 1px; background: var(--ink); opacity: .55;
-    transform: scaleX(0); transform-origin: left center;
-  }
+  #openBtn:active { transform: scale(.96); box-shadow: 0 5px 14px -8px rgba(38, 34, 28, .45); }
   .front .arr {
-    display: block; margin-top: 16px;
+    display: block; margin-top: 18px;
     width: 1px; height: 24px; background: var(--faint);
     opacity: 0;
   }
@@ -143,38 +148,46 @@
     50%      { transform: scaleY(1); opacity: 1; }
   }
   .writing #openBtn { animation: btnin 1s ease-out both; }
-  .writing #openBtn::after { animation: rule .9s cubic-bezier(.6,0,.2,1) both; animation-delay: inherit; }
-  .writing .front .arr { animation: drip 2.2s ease-in-out .6s infinite; }
+  .writing .front .arr { animation: drip 2.2s ease-in-out infinite; }
   @keyframes btnin { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-  @keyframes rule { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  #openBtn:active { opacity: .6; }
 
-  /* ======================= BGM 칩 ======================= */
+  /* ======================= BGM 버튼 — 원형 아이콘 ======================= */
   #bgmChip {
     position: fixed; top: calc(14px + env(safe-area-inset-top)); left: 16px; z-index: 60;
-    display: flex; align-items: center; gap: 7px;
-    font-size: 12px; color: var(--soft);
-    background: color-mix(in srgb, var(--paper) 74%, transparent);
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    color: var(--soft);
+    background: rgba(253, 252, 249, .78);
+    background: color-mix(in srgb, var(--paper) 76%, transparent);
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 7px 13px;
-    transition: color .3s, border-color .3s;
+    border-radius: 50%;
+    transition: color .3s, border-color .3s, transform .2s;
   }
-  #bgmChip .bars { display: flex; align-items: flex-end; gap: 2px; height: 11px; }
-  #bgmChip .bars i { width: 2px; height: 4px; background: currentColor; border-radius: 1px; }
-  #bgmChip.playing { color: var(--rose); border-color: color-mix(in srgb, var(--rose) 40%, transparent); }
+  #bgmChip:active { transform: scale(.92); }
+  #bgmChip .bars { display: flex; align-items: flex-end; gap: 2.5px; height: 12px; }
+  #bgmChip .bars i { width: 2px; height: 5px; background: currentColor; border-radius: 1px; }
+  #bgmChip::after {
+    content: ""; position: absolute;
+    width: 20px; height: 1.5px; border-radius: 1px;
+    background: currentColor;
+    transform: rotate(-45deg);
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  #bgmChip.playing { color: var(--rose); border-color: rgba(196, 106, 126, .4); border-color: color-mix(in srgb, var(--rose) 40%, transparent); }
+  #bgmChip.playing::after { transform: rotate(-45deg) scaleX(0); opacity: 0; }
   #bgmChip.playing .bars i { animation: eq 1s ease-in-out infinite; }
   #bgmChip.playing .bars i:nth-child(2) { animation-delay: .2s; }
   #bgmChip.playing .bars i:nth-child(3) { animation-delay: .45s; }
-  @keyframes eq { 0%, 100% { height: 4px; } 50% { height: 11px; } }
+  @keyframes eq { 0%, 100% { height: 5px; } 50% { height: 12px; } }
   #bgmChip.blocked { animation: nudge 2.4s ease-in-out infinite; }
-  @keyframes nudge { 0%, 100% { box-shadow: 0 0 0 0 rgba(196,106,126,0); } 50% { box-shadow: 0 0 0 6px rgba(196,106,126,.13); } }
+  @keyframes nudge { 0%, 100% { box-shadow: 0 0 0 0 rgba(196,106,126,0); } 50% { box-shadow: 0 0 0 7px rgba(196,106,126,.13); } }
 
   /* ======================= 퀵바 ======================= */
   #quicknav {
     position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 60;
     display: flex;
+    background: rgba(253, 252, 249, .8);
     background: color-mix(in srgb, var(--paper) 78%, transparent);
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--line);
@@ -185,8 +198,8 @@
   }
   .opened #quicknav { opacity: 1; pointer-events: auto; transform: none; }
   #quicknav a {
-    font-size: 12px; color: var(--soft);
-    padding: 9px 15px; letter-spacing: .1em;
+    font-size: 12.5px; color: var(--soft);
+    padding: 10px 17px; letter-spacing: .08em;
   }
   #quicknav a + a { border-left: 1px solid var(--line); }
   #quicknav a:active { background: rgba(38,34,28,.05); }
@@ -214,7 +227,13 @@
     color: var(--ink);
   }
   #cover .script { margin-bottom: 4vh; }
-  .art { position: relative; height: min(42svh, 82vw); cursor: pointer; }
+  .art {
+    position: relative; cursor: pointer;
+    height: min(42vh, 82vw);
+    height: min(42svh, 82vw);
+    transition: height .9s cubic-bezier(.2,.8,.3,1);
+  }
+  .art.real { height: min(54vh, 96vw); height: min(54svh, 96vw); }
   .art .illust {
     height: 100%; width: auto;
     filter: drop-shadow(0 16px 22px rgba(59,47,30,.15));
@@ -321,7 +340,7 @@
   #story3 { background: linear-gradient(var(--cream), var(--paper)); }
 
   /* ======================= 사진관 ======================= */
-  #gallery { min-height: 100svh; scroll-snap-align: start; background: var(--paper); padding: 96px 20px 72px; text-align: center; }
+  #gallery { min-height: 100vh; min-height: 100svh; background: var(--paper); padding: 96px 20px 72px; text-align: center; }
   #gallery .head { margin-bottom: 4vh; }
   .grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
@@ -332,20 +351,24 @@
   .grid button:active img { transform: scale(1.04); }
   .grid .hidden-cell { display: none; }
   .grid.all .hidden-cell { display: block; }
-  .g-actions { display: flex; justify-content: center; gap: 34px; margin-top: 26px; }
+  .g-actions { display: flex; justify-content: center; gap: 12px; margin-top: 28px; }
   .txt-btn {
-    position: relative;
-    font-family: var(--serif); font-size: 13.5px;
-    letter-spacing: .22em; text-indent: .22em;
+    font-size: 13px; font-weight: 400;
+    letter-spacing: .12em; text-indent: .12em;
     color: var(--soft);
-    padding: 8px 2px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 11px 24px;
+    transition: color .25s, border-color .25s, background .25s, transform .15s;
   }
-  .txt-btn::after {
-    content: ""; position: absolute; left: 6%; right: 6%; bottom: 4px;
-    height: 1px; background: currentColor; opacity: .45;
-    transform: scaleX(1); transition: transform .4s ease, opacity .3s;
+  .txt-btn:active {
+    color: var(--rose);
+    border-color: rgba(196, 106, 126, .4);
+    border-color: color-mix(in srgb, var(--rose) 40%, transparent);
+    background: rgba(196, 106, 126, .06);
+    background: color-mix(in srgb, var(--rose) 6%, transparent);
+    transform: scale(.97);
   }
-  .txt-btn:active { color: var(--rose); }
   .grid.all + .g-actions #moreBtn { display: none; }
 
   /* 라이트박스 */
@@ -395,14 +418,15 @@
   }
 
   /* ======================= 안내 ======================= */
-  #info { scroll-snap-align: start; background: var(--cream); padding: 96px 24px 40px; }
+  #info { background: var(--cream); padding: 96px 24px 40px; }
   #info .head { text-align: center; margin-bottom: 5vh; }
   .card {
     max-width: 420px; margin: 0 auto 14px;
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 26px 24px;
+    box-shadow: 0 1px 3px rgba(38, 34, 28, .04);
   }
   .card h4 {
     font-family: var(--serif); font-weight: 700; font-size: 15px;
@@ -413,7 +437,7 @@
   .cal .mon { font-family: var(--serif); font-size: 14px; letter-spacing: .3em; text-indent: .3em; color: var(--soft); margin-bottom: 12px; }
   .cal table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .cal th { font-weight: 400; color: var(--faint); padding: 6px 0; font-size: 11px; letter-spacing: .1em; }
-  .cal th:first-child, .cal td:first-child { color: color-mix(in srgb, var(--rose) 70%, var(--faint)); }
+  .cal th:first-child, .cal td:first-child { color: #CE8A93; color: color-mix(in srgb, var(--rose) 70%, var(--faint)); }
   .cal td { padding: 7px 0; color: var(--soft); position: relative; }
   .cal td.day1 { color: #fff; font-weight: 500; }
   .cal td.day1::before {
@@ -443,10 +467,11 @@
   .copy-line { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; font-size: 13px; color: var(--soft); }
   .copy-btn {
     font-size: 11.5px; color: var(--rose);
-    border: 1px solid color-mix(in srgb, var(--rose) 35%, transparent);
+    border: 1px solid rgba(196, 106, 126, .35);
+    border-color: color-mix(in srgb, var(--rose) 35%, transparent);
     border-radius: 999px; padding: 3px 10px;
   }
-  .copy-btn:active { background: color-mix(in srgb, var(--rose) 10%, transparent); }
+  .copy-btn:active { background: rgba(196, 106, 126, .1); background: color-mix(in srgb, var(--rose) 10%, transparent); }
 
   details { border-top: 1px dashed var(--line); }
   details:first-of-type { border-top: none; }
@@ -524,7 +549,7 @@
 </div>
 
 <button id="bgmChip" type="button" aria-label="배경음악 켜기/끄기">
-  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="bgmLabel">music</span>
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
 </button>
 
 <nav id="quicknav" aria-label="빠른 이동">
@@ -688,7 +713,7 @@
 </main>
 
 <!-- 라이트박스 -->
-<div id="lightbox" role="dialog" aria-label="사진 크게 보기">
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
   <div class="top">
     <span id="lbCount">1 / 27</span>
     <button id="lbClose" type="button" aria-label="닫기">×</button>
@@ -697,7 +722,7 @@
 </div>
 
 <!-- 상영회 -->
-<div id="cinema" role="dialog" aria-label="슬라이드쇼">
+<div id="cinema" role="dialog" aria-modal="true" aria-label="슬라이드쇼">
   <img id="cinA" alt=""><img id="cinB" alt="">
   <p class="cap">우리의 하루를 보여드릴게요 · 탭하면 닫혀요</p>
 </div>
@@ -732,9 +757,14 @@
   document.getElementById('openArr').style.animationDelay = (delay + 0.6).toFixed(2) + 's';
   requestAnimationFrame(function () { prologue.classList.add('writing'); });
 
+  function armOpenBtn() { openBtn.style.pointerEvents = 'auto'; }
+  var armTimer = setTimeout(armOpenBtn, (delay + 0.4) * 1000);
+
   front.addEventListener('pointerdown', function (e) {
     if (e.target.closest('#openBtn')) return;
     prologue.classList.add('done');
+    clearTimeout(armTimer);
+    armOpenBtn();
   });
 
   openBtn.addEventListener('click', function () {
@@ -742,48 +772,70 @@
     root.classList.remove('locked');
     setTimeout(function () { prologue.remove(); }, 1800);
     startArtLoop();
-  });
+    kickAudio(); /* 확실한 사용자 제스처 시점 — 차단됐던 브라우저도 여기서 시작 */
+  }, { once: true });
 
   /* ---------- BGM ---------- */
   var audio = document.getElementById('bgm');
   var chip = document.getElementById('bgmChip');
-  var label = document.getElementById('bgmLabel');
-  var userOff = sessionStorage.getItem('bgm-off') === '1';
+  function store(k, v) { try { v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch (e) {} }
+  function read(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  var userOff = read('bgm-off') === '1';
 
   function fadeTo(target, ms) {
     var from = audio.volume, t0 = performance.now();
     (function step(t) {
       var k = Math.min(1, (t - t0) / ms);
-      audio.volume = from + (target - from) * k;
+      try { audio.volume = from + (target - from) * k; } catch (e) {}
       if (k < 1) requestAnimationFrame(step);
       else if (target === 0) audio.pause();
     })(t0);
   }
   function setChip(state) {
     chip.classList.remove('playing', 'blocked');
-    if (state === 'playing') { chip.classList.add('playing'); label.textContent = 'Mid Air'; }
-    else if (state === 'blocked') { chip.classList.add('blocked'); label.textContent = '소리와 함께'; }
-    else label.textContent = 'music';
+    if (state === 'playing') chip.classList.add('playing');
+    else if (state === 'blocked') chip.classList.add('blocked');
+    chip.setAttribute('aria-pressed', state === 'playing' ? 'true' : 'false');
   }
+  /* 칩 표시는 실제 재생 이벤트 기준 — OS가 멈춰도 동기화 유지 */
+  audio.addEventListener('play', function () { setChip('playing'); });
+  audio.addEventListener('pause', function () { setChip(userOff ? 'off' : 'blocked'); });
+
   function tryPlay() {
-    audio.volume = 0;
-    return audio.play().then(function () { fadeTo(0.85, 2600); setChip('playing'); });
+    try { audio.volume = 0; } catch (e) {}
+    return audio.play().then(function () { fadeTo(0.85, 2600); });
+  }
+  function kickAudio() {
+    if (!userOff && audio.paused) tryPlay().catch(function () { setChip('blocked'); });
   }
   if (!userOff) {
+    /* 카톡 인앱 등 자동재생 허용 환경에서는 접속 즉시 시작 */
     tryPlay().catch(function () {
       setChip('blocked');
       var once = function () {
-        if (!userOff && audio.paused) tryPlay().catch(function () {});
-        window.removeEventListener('pointerdown', once);
+        if (!userOff && audio.paused) {
+          tryPlay().then(function () { window.removeEventListener('pointerup', once); }).catch(function () {});
+        } else {
+          window.removeEventListener('pointerup', once);
+        }
       };
-      window.addEventListener('pointerdown', once);
+      window.addEventListener('pointerup', once);
     });
+  } else {
+    setChip('off');
   }
   chip.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+  chip.addEventListener('pointerup', function (e) { e.stopPropagation(); });
   chip.addEventListener('click', function (e) {
     e.stopPropagation();
-    if (audio.paused) { userOff = false; sessionStorage.removeItem('bgm-off'); tryPlay().catch(function () {}); }
-    else { userOff = true; sessionStorage.setItem('bgm-off', '1'); fadeTo(0, 500); setChip('off'); }
+    if (userOff || audio.paused) {
+      userOff = false; store('bgm-off', null);
+      tryPlay().catch(function () { setChip('blocked'); });
+    } else {
+      userOff = true; store('bgm-off', '1');
+      fadeTo(0, 400);
+      setChip('off');
+    }
   });
 
   /* ---------- 대문: 그림 ↔ 사진 자동 교차, 꽃잎 ---------- */
@@ -909,8 +961,7 @@
   });
 
   /* ---------- D-day / 에필로그 ---------- */
-  var target = new Date('2026-11-01T11:00:00+09:00');
-  var days = Math.ceil((target - Date.now()) / 86400000);
+  var days = Math.round((new Date(2026, 10, 1) - new Date().setHours(0, 0, 0, 0)) / 86400000);
   var ddayEl = document.getElementById('dday');
   if (days > 0) ddayEl.textContent = 'D-' + days;
   else if (days === 0) ddayEl.textContent = 'D-day';
@@ -930,8 +981,16 @@
     toastTimer = setTimeout(function () { t.classList.remove('on'); }, 1800);
   }
   function copy(text, msg) {
-    navigator.clipboard.writeText(text).then(function () { toast(msg); })
-      .catch(function () { toast('복사에 실패했어요'); });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast(msg); })
+        .catch(function () { toast('복사에 실패했어요'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast(msg); } catch (e) { toast('복사에 실패했어요'); }
+      ta.remove();
+    }
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-copy]');
@@ -940,6 +999,13 @@
   document.getElementById('linkBtn').addEventListener('click', function () {
     copy(location.href, '링크가 복사되었습니다');
   });
+  /* ESC로 오버레이 닫기 (데스크톱·외장 키보드) */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (lb.classList.contains('on')) { lb.classList.remove('on'); root.classList.remove('locked'); }
+    if (cinema.classList.contains('on')) { clearInterval(cinTimer); cinema.classList.remove('on'); root.classList.remove('locked'); }
+  });
+
   var shareBtn = document.getElementById('shareBtn');
   if (navigator.share) {
     shareBtn.addEventListener('click', function () {
