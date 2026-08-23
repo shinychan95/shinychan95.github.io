@@ -22,6 +22,26 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
 <noscript><style>#prologue{display:none}[data-reveal],.fx{opacity:1!important;transform:none!important}#cover::before{display:none}#quicknav{opacity:1;pointer-events:auto}</style></noscript>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "찬영 ♥ 유선 결혼식",
+  "startDate": "2026-11-01T11:00:00+09:00",
+  "endDate": "2026-11-01T13:00:00+09:00",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": "노블발렌티 삼성",
+    "address": "서울특별시 강남구 봉은사로 637"
+  },
+  "image": ["https://yoosun.shinychan95.com/assets/og.jpg"],
+  "description": "2026년 11월 1일 일요일 오전 11시, 노블발렌티 삼성",
+  "url": "https://yoosun.shinychan95.com/"
+}
+</script>
+
 <style>
   :root {
     --paper: #FDFCF9;
@@ -39,9 +59,9 @@
     --script: "Great Vibes", cursive;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  /* proximity: 챕터는 페이지 단위로 붙고, 사진관·안내처럼 긴 섹션은 자유 스크롤
-     (mandatory는 아코디언 등 레이아웃 변화 시 섹션 상단으로 재스냅하는 버그가 있음) */
-  html { scroll-snap-type: y proximity; }
+  /* scroll-snap은 사용하지 않는다 — 모바일 크롬에서 앵커 점프가 튕기고,
+     아코디언 등 레이아웃 변화 시 재스냅 버그가 있어 자유 스크롤로 확정 */
+  html { scroll-behavior: smooth; }
   html.locked { overflow: hidden; }
   body {
     background: var(--paper);
@@ -60,7 +80,6 @@
   .pg {
     min-height: 100vh;
     min-height: 100svh;
-    scroll-snap-align: start;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center;
@@ -522,7 +541,7 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
     .hw span, .fx, #openBtn, [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
-    html { scroll-snap-type: none; }
+    html { scroll-behavior: auto; }
   }
 </style>
 </head>
