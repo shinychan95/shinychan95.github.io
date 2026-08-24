@@ -45,8 +45,9 @@
 <style>
   :root {
     --paper: #FDFCF9;
-    --blush: #F4E7E1;
-    --blush2: #EFDCD5;
+    --lt: #F5EDE8;          /* 유일한 라이트 그라운드 */
+    --blush: #F5EDE8;
+    --blush2: #F5EDE8;
     --blk: #16130F;
     --blk2: #1E1A15;
     --ink: #26221C;
@@ -70,7 +71,7 @@
   html { scroll-behavior: smooth; }
   html.locked { overflow: hidden; }
   body {
-    background: var(--paper);
+    background: var(--lt);
     color: var(--ink);
     font-family: var(--sans);
     font-weight: 300;
@@ -101,7 +102,7 @@
     font-family: var(--display); font-weight: 500;
     font-size: 17px; letter-spacing: .42em; text-indent: .42em;
   }
-  .label .s { font-family: var(--pen); font-size: 16px; color: var(--faint); margin-top: -4px; }
+  .label .s { font-family: var(--sans); font-weight: 300; font-size: 12px; letter-spacing: .12em; color: var(--faint); }
   .on-blk .label .s { color: var(--soft-onblk); }
 
   /* ---------- 필름 스트립 경계 ---------- */
@@ -115,7 +116,7 @@
   }
   .film-cut::before, .film-cut::after {
     content: ""; position: absolute; left: 0; right: 0; height: 9px;
-    background-image: repeating-linear-gradient(90deg, var(--hole, #F4E7E1) 0 12px, transparent 12px 28px);
+    background-image: repeating-linear-gradient(90deg, var(--hole, #F5EDE8) 0 12px, transparent 12px 28px);
     border-radius: 2px;
   }
   .film-cut::before { top: 9px; }
@@ -144,7 +145,7 @@
     opacity: 0; transition: opacity .9s ease;
   }
   .opened .face.front::after { opacity: 1; }
-  .face.back { background: var(--blush); transform: rotateY(180deg); }
+  .face.back { background: var(--lt); transform: rotateY(180deg); }
   .backmark {
     width: 132px; height: 132px; border-radius: 50%;
     border: 1px solid rgba(38,34,28,.22);
@@ -244,7 +245,7 @@
   #quicknav a:active { background: rgba(38,34,28,.05); }
 
   /* ======================= 대문 ======================= */
-  #cover { background: radial-gradient(130% 95% at 50% 4%, var(--paper) 0%, var(--blush) 72%, var(--blush2) 100%); }
+  #cover { background: var(--lt); }
   #cover::before {
     content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
     background: linear-gradient(100deg, rgba(38,30,20,.32) 0%, rgba(38,30,20,.09) 34%, rgba(38,30,20,0) 60%);
@@ -291,8 +292,8 @@
     transition: transform .95s cubic-bezier(.2,.8,.3,1);
   }
   .art .photo figcaption {
-    position: absolute; bottom: -28px; left: 0; right: 0;
-    font-family: var(--pen); font-size: 16px; color: var(--soft);
+    position: absolute; bottom: -30px; left: 0; right: 0;
+    font-family: var(--serif-kr); font-size: 12.5px; letter-spacing: .1em; color: var(--soft);
     opacity: 0; transition: opacity .6s ease .3s;
   }
   .art.real .illust { opacity: 0; transform: scale(.965); filter: blur(2px); }
@@ -306,9 +307,9 @@
     margin-top: 3.6vh;
   }
   .names-en {
-    font-family: var(--display); font-weight: 500;
-    font-size: 12px; letter-spacing: .34em; text-indent: .34em;
-    color: var(--soft); margin-top: 8px;
+    font-family: var(--sans); font-weight: 400;
+    font-size: 10.5px; letter-spacing: .44em; text-indent: .44em;
+    color: var(--faint); margin-top: 10px;
   }
   .when  { font-size: clamp(13px, 3.6vw, 15px); color: var(--soft); letter-spacing: .04em; margin-top: 14px; }
   .where { font-size: clamp(13px, 3.6vw, 15px); font-weight: 400; color: var(--soft); letter-spacing: .12em; margin-top: 2px; }
@@ -339,11 +340,6 @@
     font-size: 14px; letter-spacing: .08em;
     color: var(--soft-onblk); margin-top: 26px;
   }
-  #quote .ost {
-    font-family: var(--pen); font-size: 17px; color: var(--soft-onblk);
-    margin-top: 5.5vh; opacity: .9;
-  }
-  #quote .ost b { color: var(--rose-soft); font-weight: 400; }
 
   /* ======================= 인사 (블랙) ======================= */
   #greet { padding-bottom: 110px; }
@@ -359,7 +355,7 @@
   #greet .msg .hl { color: #fff; font-weight: 400; }
 
   /* ======================= CAST (블러시) ======================= */
-  #cast { background: var(--blush); }
+  #cast { background: var(--lt); }
   .cast-list { display: grid; gap: 4.5vh; margin-top: 1vh; }
   .cast-item .role {
     font-family: var(--display); font-weight: 500;
@@ -371,9 +367,7 @@
   .cast-item .of b { font-weight: 400; color: var(--ink); }
 
   /* ======================= 타임라인 SCENE (블러시) ======================= */
-  .story { background: linear-gradient(var(--blush), var(--blush2)); }
-  #story2 { background: var(--blush2); }
-  #story3 { background: linear-gradient(var(--blush2), var(--blush)); }
+  .story { background: var(--lt); }
   .story .thread {
     position: absolute; top: 0; left: 50%; width: 1px; height: 66px;
     background: linear-gradient(rgba(38,34,28,.3), transparent);
@@ -391,15 +385,16 @@
     margin-bottom: 2.6vh;
   }
   .story .line {
-    font-family: var(--pen);
-    font-size: clamp(19px, 5.4vw, 23px);
-    color: var(--soft);
-    max-width: 24ch;
+    font-family: var(--serif-kr);
+    font-size: clamp(14.5px, 4vw, 16.5px);
+    line-height: 2.15;
+    color: var(--ink);
+    max-width: 26ch;
   }
   .story .yr { font-family: var(--display); font-style: italic; font-size: 14px; letter-spacing: .18em; color: var(--faint); margin-top: 3vh; }
 
   /* ======================= 갤러리 — 가로 필름 릴 (블러시) ======================= */
-  #gallery { background: var(--blush); padding: 100px 0 84px; text-align: center; }
+  #gallery { background: var(--lt); padding: 100px 0 84px; text-align: center; }
   .reel {
     display: flex; gap: 16px;
     overflow-x: auto;
@@ -430,12 +425,7 @@
     width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
     background: #26221C;
   }
-  .frame .fno {
-    position: absolute; bottom: 25px; right: 16px;
-    font-family: var(--mono); font-size: 9px; letter-spacing: .12em;
-    color: rgba(244,231,225,.55);
-  }
-  .reel-hint { font-family: var(--pen); font-size: 16px; color: var(--faint); margin-top: 4px; }
+  .reel-hint { font-family: var(--sans); font-weight: 300; font-size: 11.5px; letter-spacing: .14em; color: var(--faint); margin-top: 6px; }
   .g-actions { display: flex; justify-content: center; gap: 12px; margin-top: 26px; }
   .txt-btn {
     font-size: 13px; font-weight: 400;
@@ -456,9 +446,10 @@
   }
 
   /* ======================= OUR STORY — 블로그 (블러시2) ======================= */
-  #archive { background: var(--blush2); padding: 96px 24px; text-align: center; }
-  #archive .desc { font-size: 14px; color: var(--soft); max-width: 32ch; margin: 0 auto 26px; }
-  #archive .desc b { font-weight: 400; color: var(--ink); }
+  #archive { background: var(--lt); padding: 96px 24px; text-align: center; }
+  #archive .desc { margin: 0 auto 26px; }
+  #archive .desc span { display: block; white-space: nowrap; font-size: clamp(12px, 3.4vw, 14px); color: var(--soft); line-height: 2; }
+  #archive .desc .hl { color: var(--ink); font-weight: 400; }
   .blog-card {
     max-width: 380px; margin: 0 auto;
     background: var(--paper);
@@ -475,54 +466,56 @@
   .blog-card:active { transform: scale(.985); }
 
   /* ======================= 안내 (페이퍼) ======================= */
-  #info { background: var(--paper); padding: 100px 24px 48px; }
+  #info { background: var(--lt); padding: 100px 24px 56px; }
   #info .head { text-align: center; }
   .card {
-    max-width: 420px; margin: 0 auto 14px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 26px 24px;
-    box-shadow: 0 1px 3px rgba(38, 34, 28, .04);
+    max-width: 420px; margin: 0 auto 18px;
+    background: #FFFEFC;
+    border: 1px solid rgba(38, 34, 28, .08);
+    border-radius: 20px;
+    padding: 30px 28px;
+    box-shadow: 0 14px 34px -26px rgba(59, 47, 30, .45);
   }
   .card h4 {
-    font-family: var(--display); font-weight: 500; font-size: 13px;
-    letter-spacing: .34em; text-indent: .34em;
-    text-align: center; margin-bottom: 18px; color: var(--ink);
+    display: flex; align-items: center; gap: 16px;
+    font-family: var(--display); font-weight: 500; font-size: 12px;
+    letter-spacing: .32em; text-indent: .32em;
+    justify-content: center; margin-bottom: 22px; color: var(--ink);
   }
+  .card h4::before, .card h4::after { content: ""; height: 1px; flex: 1; max-width: 56px; background: var(--line); }
 
   /* 티켓 카드 */
   .ticket {
-    max-width: 420px; margin: 0 auto 14px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(38, 34, 28, .04);
+    max-width: 420px; margin: 0 auto 18px;
+    background: #FFFEFC;
+    border: 1px solid rgba(38, 34, 28, .08);
+    border-radius: 20px;
+    box-shadow: 0 14px 34px -26px rgba(59, 47, 30, .45);
     position: relative;
     overflow: hidden;
   }
   .ticket .stub {
-    padding: 24px 26px 20px;
-    border-bottom: 1.5px dashed rgba(38,34,28,.2);
+    padding: 28px 30px 24px;
+    border-bottom: 1.5px dashed rgba(38,34,28,.16);
     position: relative;
   }
   .ticket .notch-l, .ticket .notch-r {
     position: absolute; width: 22px; height: 22px; border-radius: 50%;
-    background: var(--paper); border: 1px solid var(--line);
+    background: var(--lt); border: 1px solid rgba(38, 34, 28, .08);
     top: 100%; transform: translateY(-50%); z-index: 2;
   }
   .ticket .notch-l { left: -12px; }
   .ticket .notch-r { right: -12px; }
   .ticket .tk-head {
     display: flex; justify-content: space-between; align-items: baseline;
-    font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--faint);
-    margin-bottom: 14px;
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .24em; color: var(--faint);
+    margin-bottom: 18px;
   }
   .ticket .tk-row { display: flex; gap: 16px; align-items: baseline; padding: 4px 0; }
   .ticket .tk-row .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; color: var(--faint); width: 44px; flex: none; }
-  .ticket .tk-row .v { font-family: var(--display); font-weight: 500; font-size: 17px; letter-spacing: .04em; }
+  .ticket .tk-row .v { font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: .06em; }
   .ticket .tk-row .v small { font-family: var(--sans); font-weight: 300; font-size: 13px; color: var(--soft); margin-left: 6px; }
-  .ticket .body { padding: 22px 26px 26px; position: relative; }
+  .ticket .body { padding: 26px 30px 30px; position: relative; }
 
   .cal { max-width: 300px; margin: 0 auto; text-align: center; }
   .cal .mon { font-family: var(--serif-kr); font-weight: 700; font-size: 15px; letter-spacing: .22em; text-indent: .22em; color: var(--ink); margin-bottom: 12px; }
@@ -543,17 +536,17 @@
 
   .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; font-size: 14px; }
   .row + .row { border-top: 1px dashed var(--line); }
-  .row .k { color: var(--faint); font-size: 12.5px; letter-spacing: .1em; flex: none; }
+  .row .k { font-family: var(--serif-kr); font-weight: 700; color: var(--faint); font-size: 12px; letter-spacing: .18em; flex: none; }
   .row .v { text-align: right; color: var(--ink); font-weight: 300; line-height: 1.7; }
   .row .v small { display: block; color: var(--soft); font-size: 12px; }
   .maps { display: flex; gap: 8px; margin-top: 16px; }
   .maps a {
     flex: 1; text-align: center;
     font-size: 12.5px; color: var(--soft); letter-spacing: .04em;
-    border: 1px solid var(--line); border-radius: 9px;
-    padding: 10px 0;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 11px 0;
   }
-  .maps a:active { background: var(--blush); }
+  .maps a:active { background: var(--lt); }
   .copy-line { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; font-size: 13px; color: var(--soft); }
   .copy-btn {
     font-size: 11.5px; color: var(--rose);
@@ -602,7 +595,7 @@
     color: var(--ink-onblk);
     line-height: 1.3;
   }
-  footer .thanks { font-family: var(--pen); font-size: clamp(18px, 5vw, 22px); color: var(--soft-onblk); margin-top: 4.5vh; }
+  footer .thanks { font-family: var(--serif-kr); font-size: clamp(14px, 3.9vw, 16px); letter-spacing: .04em; color: var(--soft-onblk); margin-top: 4.5vh; }
   footer .sig {
     font-family: var(--display); font-style: italic; font-weight: 500;
     font-size: 15px; letter-spacing: .14em;
@@ -653,7 +646,7 @@
   @keyframes kb { from { scale: 1; } to { scale: 1.045; } }
   #cinema .cap {
     position: absolute; bottom: calc(30px + env(safe-area-inset-bottom)); left: 0; right: 0;
-    text-align: center; font-family: var(--pen); font-size: 18px;
+    text-align: center; font-family: var(--sans); font-weight: 300; font-size: 13px; letter-spacing: .08em;
     color: rgba(253,252,249,.75); z-index: 2;
   }
 
@@ -707,7 +700,7 @@
       </figure>
     </div>
     <h1 class="names fx fx3">찬영 · 유선</h1>
-    <p class="names-en fx fx3">CHANYOUNG &amp; YUSEON</p>
+    <p class="names-en fx fx3">CHANYOUNG &amp; YOOSUN</p>
     <p class="when fx fx4" id="whenLine">2026년 11월 1일 일요일 오전 11시</p>
     <p class="where fx fx4">노블발렌티 삼성</p>
     <span class="cue" aria-hidden="true"></span>
@@ -718,9 +711,8 @@
   <!-- ======================= 어바웃 타임 ======================= -->
   <section id="quote" class="pg on-blk">
     <p class="qmark" aria-hidden="true" data-reveal>&ldquo;</p>
-    <p class="q" data-reveal style="--d:.1s">우리는 모두, 인생의 하루하루를<br>함께 시간여행하고 있는지도 모릅니다.</p>
+    <p class="q" data-reveal style="--d:.1s">우리는 모두 시간 여행을 한다.<br>인생의 모든 날들을<br>할 수 있는 최선을 다해<br>이 멋진 여행을 즐기자.</p>
     <p class="from" data-reveal style="--d:.2s">&mdash; About Time, 2013</p>
-    <p class="ost" data-reveal style="--d:.35s">지금 흐르는 음악 <b>&lsquo;Mid Air&rsquo;</b>도 그 영화에서 왔습니다.<br>그리고 저희의 시간여행에, 당신을 초대합니다.</p>
   </section>
 
   <!-- ======================= 인사 ======================= -->
@@ -736,6 +728,8 @@
     <div class="msg" data-reveal style="--d:.1s">
       <span>가족과 제 앞에서는 유난히 말이 많아지는,</span>
       <span class="hl">사랑스러운 사람</span>
+    </div>
+    <div class="msg" data-reveal style="--d:.18s">
       <span>넓은 세상을 사랑했지만,</span>
       <span class="hl">이제는 그 사람 곁에서 온 마음을 다하게 된 사람</span>
     </div>
@@ -815,7 +809,7 @@
       <span class="s">상하이에서의 하루, 낮부터 밤까지</span>
     </div>
     <div class="reel" id="reel" data-reveal></div>
-    <p class="reel-hint">옆으로 넘겨보세요 · 탭하면 크게</p>
+    <p class="reel-hint">옆으로 넘겨보세요 &middot; 탭하면 크게 볼 수 있어요</p>
     <div class="g-actions">
       <button class="txt-btn" id="cinemaBtn" type="button">상영회 보기</button>
     </div>
@@ -831,7 +825,10 @@
       </svg>
       <span class="t">OUR STORY</span>
     </div>
-    <p class="desc" data-reveal style="--d:.1s">축하하러 와주시는 만큼, 저희가 어떤 시간을 지나<br>여기까지 왔는지 <b>짧은 글로 정리해 두었어요.</b></p>
+    <p class="desc" data-reveal style="--d:.1s">
+      <span>축하하러 와주시는 마음에 보답하고 싶어,</span>
+      <span class="hl">저희의 지난 시간들을 짧은 글로 정리해 두었어요.</span>
+    </p>
     <!-- TODO(블로그): href를 실제 블로그 글 주소로 교체 -->
     <a class="blog-card" href="#" id="blogLink" data-reveal style="--d:.2s" aria-disabled="true">
       <p class="bk">BEHIND STORY</p>
@@ -922,12 +919,12 @@
     </div>
   </section>
 
-  <div class="film-cut" style="--hole:#FDFCF9" aria-hidden="true"></div>
+  <div class="film-cut" aria-hidden="true"></div>
 
   <footer>
     <p class="tbc" data-reveal>To be continued &hellip;</p>
     <p class="thanks" id="thanksLine" data-reveal style="--d:.15s">저희의 시작을 축복해 주셔서 감사합니다</p>
-    <p class="sig" data-reveal style="--d:.25s">Chanyoung &amp; Yuseon</p>
+    <p class="sig" data-reveal style="--d:.25s">Chanyoung &amp; Yoosun</p>
     <p class="credit">MADE BY CHANYOUNG, WITH YUSEON</p>
   </footer>
 </main>
@@ -1109,11 +1106,7 @@
     img.src = 'assets/thumbs/snap' + n + '.jpg';
     img.loading = 'lazy';
     img.alt = '';
-    var no = document.createElement('span');
-    no.className = 'fno';
-    no.textContent = 'CY·YS FILM — ' + String(i + 1).padStart(2, '0');
     b.appendChild(img);
-    b.appendChild(no);
     b.addEventListener('click', function () { openLightbox(i); });
     reel.appendChild(b);
   });
