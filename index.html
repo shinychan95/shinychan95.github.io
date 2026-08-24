@@ -109,8 +109,8 @@
   .film-cut {
     position: relative; z-index: 3;
     height: 68px;
-    margin: -34px 0;
-    transform: rotate(-2.2deg) scaleX(1.12);
+    margin: 0 0 -68px;
+    transform: translateY(11px) rotate(-2.2deg) scaleX(1.12);
     background: var(--blk);
     box-shadow: 0 6px 18px -8px rgba(22, 19, 15, .45);
   }
@@ -123,7 +123,7 @@
   .film-cut::after { bottom: 9px; }
 
   /* ======================= 서장 ======================= */
-  #prologue { position: fixed; inset: 0; z-index: 40; perspective: 1700px; pointer-events: none; }
+  #prologue { position: fixed; inset: 0; z-index: 40; perspective: 3400px; pointer-events: none; }
   #leaf {
     position: absolute; inset: 0;
     pointer-events: auto;
@@ -245,7 +245,11 @@
   #quicknav a:active { background: rgba(38,34,28,.05); }
 
   /* ======================= 대문 ======================= */
-  #cover { background: var(--lt); }
+  #cover {
+    background: var(--lt);
+    min-height: 100dvh;
+    padding: 52px 24px 72px;
+  }
   #cover::before {
     content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
     background: linear-gradient(100deg, rgba(38,30,20,.32) 0%, rgba(38,30,20,.09) 34%, rgba(38,30,20,0) 60%);
@@ -265,14 +269,12 @@
     font-weight: 400;
     color: var(--ink);
   }
-  #cover .script { margin-bottom: 3.6vh; }
+  #cover .script { margin-bottom: 2.2vh; }
   .art {
     position: relative; cursor: pointer;
-    height: min(40vh, 78vw);
-    height: min(40svh, 78vw);
-    transition: height .9s cubic-bezier(.2,.8,.3,1);
+    height: min(46vh, 90vw);
+    height: min(46svh, 90vw);
   }
-  .art.real { height: min(52vh, 94vw); height: min(52svh, 94vw); }
   .art .illust {
     height: 100%; width: auto;
     filter: drop-shadow(0 16px 22px rgba(59,47,30,.15));
@@ -292,8 +294,9 @@
     transition: transform .95s cubic-bezier(.2,.8,.3,1);
   }
   .art .photo figcaption {
-    position: absolute; bottom: -30px; left: 0; right: 0;
-    font-family: var(--serif-kr); font-size: 12.5px; letter-spacing: .1em; color: var(--soft);
+    position: absolute; bottom: 13px; left: 0; right: 0;
+    font-family: var(--serif-kr); font-size: 12px; letter-spacing: .14em;
+    color: rgba(255, 255, 255, .95); text-shadow: 0 1px 10px rgba(0, 0, 0, .55);
     opacity: 0; transition: opacity .6s ease .3s;
   }
   .art.real .illust { opacity: 0; transform: scale(.965); filter: blur(2px); }
@@ -304,7 +307,7 @@
     font-family: var(--serif-kr); font-weight: 700;
     font-size: clamp(21px, 5.6vw, 27px);
     letter-spacing: .34em; text-indent: .34em;
-    margin-top: 3.6vh;
+    margin-top: 2.4vh;
   }
   .names-en {
     font-family: var(--sans); font-weight: 400;
@@ -536,17 +539,19 @@
 
   .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; font-size: 14px; }
   .row + .row { border-top: 1px dashed var(--line); }
-  .row .k { font-family: var(--serif-kr); font-weight: 700; color: var(--faint); font-size: 12px; letter-spacing: .18em; flex: none; }
+  .row .k { font-weight: 400; color: rgba(196, 106, 126, .8); font-size: 11px; letter-spacing: .3em; flex: none; padding-top: 3px; }
   .row .v { text-align: right; color: var(--ink); font-weight: 300; line-height: 1.7; }
   .row .v small { display: block; color: var(--soft); font-size: 12px; }
-  .maps { display: flex; gap: 8px; margin-top: 16px; }
+  .maps { display: flex; gap: 9px; margin-top: 18px; }
   .maps a {
     flex: 1; text-align: center;
-    font-size: 12.5px; color: var(--soft); letter-spacing: .04em;
-    border: 1px solid var(--line); border-radius: 999px;
-    padding: 11px 0;
+    font-size: 12.5px; font-weight: 400; color: var(--ink); letter-spacing: .01em;
+    background: rgba(38, 34, 28, .045);
+    border-radius: 12px;
+    padding: 13px 0;
+    transition: background .25s, color .25s;
   }
-  .maps a:active { background: var(--lt); }
+  .maps a:active { background: rgba(196, 106, 126, .12); color: var(--rose); }
   .copy-line { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; font-size: 13px; color: var(--soft); }
   .copy-btn {
     font-size: 11.5px; color: var(--rose);
@@ -639,16 +644,6 @@
     z-index: 2;
   }
   #lightbox .top button { color: inherit; font-size: 22px; line-height: 1; padding: 6px; }
-  #cinema { position: fixed; inset: 0; z-index: 80; background: #0E0C0A; display: none; align-items: center; justify-content: center; }
-  #cinema.on { display: flex; }
-  #cinema img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 1.4s ease; }
-  #cinema img.show { opacity: 1; animation: kb 4.5s ease-out both; }
-  @keyframes kb { from { scale: 1; } to { scale: 1.045; } }
-  #cinema .cap {
-    position: absolute; bottom: calc(30px + env(safe-area-inset-bottom)); left: 0; right: 0;
-    text-align: center; font-family: var(--sans); font-weight: 300; font-size: 13px; letter-spacing: .08em;
-    color: rgba(253,252,249,.75); z-index: 2;
-  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
@@ -810,9 +805,6 @@
     </div>
     <div class="reel" id="reel" data-reveal></div>
     <p class="reel-hint">옆으로 넘겨보세요 &middot; 탭하면 크게 볼 수 있어요</p>
-    <div class="g-actions">
-      <button class="txt-btn" id="cinemaBtn" type="button">상영회 보기</button>
-    </div>
   </section>
 
   <!-- ======================= OUR STORY (블로그) ======================= -->
@@ -883,7 +875,7 @@
       <div class="row"><span class="k">지하철</span><span class="v">9호선 봉은사역 4번 출구 · 도보 3분<small>2호선 삼성역 7번 출구 → 버스 3417 · 강남01</small></span></div>
       <div class="row"><span class="k">주차</span><span class="v">제2주차장 이용 부탁드립니다<small>수도빌딩 · 봉은사로 610 (본관 주차장 협소)</small></span></div>
       <div class="maps">
-        <a href="https://map.naver.com/p/search/%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1" target="_blank" rel="noopener">네이버 지도</a>
+        <a href="https://map.naver.com/p/search/%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1" target="_blank" rel="noopener">네이버지도</a>
         <a href="https://map.kakao.com/?q=%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1" target="_blank" rel="noopener">카카오맵</a>
         <a href="tmap://search?name=%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1">티맵</a>
       </div>
@@ -936,12 +928,6 @@
     <button id="lbClose" type="button" aria-label="닫기">×</button>
   </div>
   <div class="strip" id="lbStrip"></div>
-</div>
-
-<!-- 상영회 -->
-<div id="cinema" role="dialog" aria-modal="true" aria-label="슬라이드쇼">
-  <img id="cinA" alt=""><img id="cinB" alt="">
-  <p class="cap">우리의 하루를 보여드릴게요 · 탭하면 닫혀요</p>
 </div>
 
 <div id="toast" role="status"></div>
@@ -1053,6 +1039,12 @@
     }
   });
 
+  /* ---------- 대문 높이를 실시간 뷰포트에 고정 (주소창 접힘 대응) ---------- */
+  var coverEl = document.getElementById('cover');
+  function fitCover() { coverEl.style.minHeight = window.innerHeight + 'px'; }
+  fitCover();
+  window.addEventListener('resize', fitCover);
+
   /* ---------- 대문: 그림 ↔ 사진 자동 교차, 꽃잎 ---------- */
   var art = document.getElementById('art');
   var artTimer = null;
@@ -1061,14 +1053,14 @@
     artTimer = setTimeout(function tick() {
       art.classList.toggle('real');
       artTimer = setTimeout(tick, art.classList.contains('real') ? 4600 : 4000);
-    }, 3200);
+    }, 1500);
   }
   art.addEventListener('click', function (e) {
     clearTimeout(artTimer); /* 탭하면 수동 모드 */
     art.classList.toggle('real');
     e.stopPropagation();
   });
-  document.getElementById('cover').addEventListener('pointerdown', function (e) {
+  document.addEventListener('pointerdown', function (e) {
     if (!document.body.classList.contains('opened')) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     for (var i = 0; i < 9; i++) {
@@ -1103,8 +1095,9 @@
     b.className = 'frame';
     b.setAttribute('aria-label', '사진 ' + (i + 1) + ' 크게 보기');
     var img = document.createElement('img');
-    img.src = 'assets/thumbs/snap' + n + '.jpg';
+    img.src = 'assets/photos/snap' + n + '.jpg';
     img.loading = 'lazy';
+    img.decoding = 'async';
     img.alt = '';
     b.appendChild(img);
     b.addEventListener('click', function () { openLightbox(i); });
@@ -1142,31 +1135,6 @@
   }
   document.getElementById('lbClose').addEventListener('click', function () {
     lb.classList.remove('on');
-    root.classList.remove('locked');
-  });
-
-  /* ---------- 상영회 ---------- */
-  var cinema = document.getElementById('cinema');
-  var cinImgs = [document.getElementById('cinA'), document.getElementById('cinB')];
-  var cinTimer = null, cinIdx = 0, cinFlip = 0;
-  function cinShow() {
-    var next = cinImgs[cinFlip ^= 1];
-    next.src = 'assets/photos/snap' + ORDER[cinIdx % ORDER.length] + '.jpg';
-    cinIdx++;
-    cinImgs.forEach(function (im) { im.classList.remove('show'); });
-    requestAnimationFrame(function () { requestAnimationFrame(function () { next.classList.add('show'); }); });
-  }
-  document.getElementById('cinemaBtn').addEventListener('click', function () {
-    cinema.classList.add('on');
-    root.classList.add('locked');
-    cinIdx = 0;
-    kickAudio();
-    cinShow();
-    cinTimer = setInterval(cinShow, 4200);
-  });
-  cinema.addEventListener('click', function () {
-    clearInterval(cinTimer);
-    cinema.classList.remove('on');
     root.classList.remove('locked');
   });
 
@@ -1222,7 +1190,6 @@
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if (lb.classList.contains('on')) { lb.classList.remove('on'); root.classList.remove('locked'); }
-    if (cinema.classList.contains('on')) { clearInterval(cinTimer); cinema.classList.remove('on'); root.classList.remove('locked'); }
   });
 
   var shareBtn = document.getElementById('shareBtn');
