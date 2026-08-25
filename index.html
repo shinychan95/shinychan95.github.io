@@ -200,9 +200,7 @@
     width: 40px; height: 40px;
     display: grid; place-items: center;
     color: var(--soft);
-    background: rgba(253, 252, 249, .78);
-    background: color-mix(in srgb, var(--paper) 76%, transparent);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    background: rgba(253, 252, 249, .92);
     border: 1px solid var(--line);
     border-radius: 50%;
     transition: color .3s, border-color .3s, transform .2s;
@@ -230,9 +228,7 @@
   #quicknav {
     position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 60;
     display: flex;
-    background: rgba(253, 252, 249, .8);
-    background: color-mix(in srgb, var(--paper) 78%, transparent);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    background: rgba(253, 252, 249, .92);
     border: 1px solid var(--line);
     border-radius: 999px;
     overflow: hidden;
@@ -281,17 +277,20 @@
     transition: opacity .85s ease, transform .85s ease, filter .85s ease;
   }
   .art .photo {
-    position: absolute; inset: 0; margin: 0;
-    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: 50%; left: 50%;
+    height: 100%; aspect-ratio: 3 / 4;
+    transform: translate(-50%, -50%);
+    margin: 0; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 22px 44px -18px rgba(59,47,30,.4);
     opacity: 0; pointer-events: none;
     transition: opacity .85s ease;
   }
+  /* 인물 크기를 일러스트와 맞춘 줌인 상태에서 시작 → 천천히 줌아웃하며 전경 공개 */
   .art .photo img {
-    height: 100%; width: auto;
-    border-radius: 10px;
-    box-shadow: 0 22px 44px -18px rgba(59,47,30,.4);
-    transform: scale(1.05);
-    transition: transform .95s cubic-bezier(.2,.8,.3,1);
+    width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.75);
+    transform-origin: 48% 62%;
+    transition: transform 3.6s cubic-bezier(.25,.6,.3,1);
   }
   .art .photo figcaption {
     position: absolute; bottom: 13px; left: 0; right: 0;
@@ -301,7 +300,7 @@
   }
   .art.real .illust { opacity: 0; transform: scale(.965); filter: blur(2px); }
   .art.real .photo { opacity: 1; }
-  .art.real .photo img { transform: none; }
+  .art.real .photo img { transform: scale(1); }
   .art.real .photo figcaption { opacity: .85; }
   .names {
     font-family: var(--serif-kr); font-weight: 700;
@@ -347,11 +346,11 @@
   /* ======================= 인사 (블랙) ======================= */
   #greet { padding-bottom: 110px; }
   #greet .msg { display: grid; gap: 2px; margin-top: 1.5vh; }
-  #greet .msg + .msg { margin-top: 4.5vh; }
+  #greet .msg + .msg { margin-top: 3vh; }
   #greet .msg span {
     display: block; white-space: nowrap;
     font-size: clamp(12.5px, 3.5vw, 15px);
-    line-height: 2.1;
+    line-height: 1.9;
     font-weight: 300;
     color: var(--ink-onblk);
   }
@@ -644,6 +643,17 @@
     z-index: 2;
   }
   #lightbox .top button { color: inherit; font-size: 22px; line-height: 1; padding: 6px; }
+  .lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 46px; height: 46px; border-radius: 50%;
+    color: rgba(253,252,249,.85); font-size: 30px; line-height: 1;
+    background: rgba(253,252,249,.08);
+    display: none;
+  }
+  .lb-nav.prev { left: 14px; }
+  .lb-nav.next { right: 14px; }
+  .lb-nav:active { background: rgba(253,252,249,.18); }
+  @media (hover: hover) and (pointer: fine) { .lb-nav { display: block; } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
@@ -917,7 +927,7 @@
     <p class="tbc" data-reveal>To be continued &hellip;</p>
     <p class="thanks" id="thanksLine" data-reveal style="--d:.15s">저희의 시작을 축복해 주셔서 감사합니다</p>
     <p class="sig" data-reveal style="--d:.25s">Chanyoung &amp; Yoosun</p>
-    <p class="credit">MADE BY CHANYOUNG, WITH YUSEON</p>
+    <p class="credit">MADE BY CHANYOUNG, WITH YOOSUN</p>
   </footer>
 </main>
 
@@ -928,6 +938,8 @@
     <button id="lbClose" type="button" aria-label="닫기">×</button>
   </div>
   <div class="strip" id="lbStrip"></div>
+  <button class="lb-nav prev" id="lbPrev" type="button" aria-label="이전 사진">&#8249;</button>
+  <button class="lb-nav next" id="lbNext" type="button" aria-label="다음 사진">&#8250;</button>
 </div>
 
 <div id="toast" role="status"></div>
@@ -1051,16 +1063,17 @@
   function startArtLoop() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     artTimer = setTimeout(function tick() {
-      art.classList.toggle('real');
-      artTimer = setTimeout(tick, art.classList.contains('real') ? 4600 : 4000);
-    }, 1500);
+      /* 대문이 화면 밖이면 전환하지 않는다 (스크롤 성능) */
+      if (coverEl.getBoundingClientRect().bottom > 0) art.classList.toggle('real');
+      artTimer = setTimeout(tick, art.classList.contains('real') ? 5200 : 4200);
+    }, 2600);
   }
   art.addEventListener('click', function (e) {
     clearTimeout(artTimer); /* 탭하면 수동 모드 */
     art.classList.toggle('real');
     e.stopPropagation();
   });
-  document.addEventListener('pointerdown', function (e) {
+  document.addEventListener('click', function (e) {
     if (!document.body.classList.contains('opened')) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     for (var i = 0; i < 9; i++) {
@@ -1103,6 +1116,13 @@
     b.addEventListener('click', function () { openLightbox(i); });
     reel.appendChild(b);
   });
+  /* 데스크톱: 세로 휠을 가로 스크롤로 */
+  reel.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      reel.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
 
   /* ---------- 라이트박스 ---------- */
   var lb = document.getElementById('lightbox');
@@ -1136,6 +1156,21 @@
   document.getElementById('lbClose').addEventListener('click', function () {
     lb.classList.remove('on');
     root.classList.remove('locked');
+  });
+  function lbGo(dir) {
+    strip.scrollBy({ left: dir * strip.clientWidth, behavior: 'smooth' });
+  }
+  document.getElementById('lbPrev').addEventListener('click', function () { lbGo(-1); });
+  document.getElementById('lbNext').addEventListener('click', function () { lbGo(1); });
+  strip.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) lbGo(e.deltaY > 0 ? 1 : -1);
+    else strip.scrollLeft += e.deltaX;
+  }, { passive: false });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'ArrowLeft') lbGo(-1);
+    if (e.key === 'ArrowRight') lbGo(1);
   });
 
   /* ---------- D-day / 에필로그 ---------- */
