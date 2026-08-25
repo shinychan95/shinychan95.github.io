@@ -288,9 +288,9 @@
   .art .photo img {
     width: 100%; height: 100%; object-fit: cover;
     object-position: 48% 60%;
-    transform: scale(1.34);
-    transform-origin: 48% 60%;
-    transition: transform 4.2s cubic-bezier(.25,.6,.3,1);
+    transform: scale(1.07);
+    transform-origin: 48% 58%;
+    transition: transform 3.5s cubic-bezier(.25,.6,.3,1);
   }
   /* 오버레이 텍스트 가독용 스크림 */
   .art .photo::after {
@@ -706,7 +706,7 @@
         <img class="illust" src="assets/illust.png" width="555" height="750"
              alt="무릎 꿇고 꽃다발을 건네는 찬영과 웃으며 바라보는 유선의 일러스트">
         <figure class="photo">
-          <img src="assets/main.jpg" width="480" height="720"
+          <img src="assets/main.jpg" width="1200" height="1800"
                alt="일러스트의 원본 사진 — 상하이의 저녁, 무릎 꿇고 부케를 건네는 순간">
         </figure>
       </div>
@@ -1072,11 +1072,8 @@
   var artTimer = null;
   function startArtLoop() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    artTimer = setTimeout(function tick() {
-      /* 대문이 화면 밖이면 전환하지 않는다 (스크롤 성능) */
-      if (coverEl.getBoundingClientRect().bottom > 0) art.classList.toggle('real');
-      artTimer = setTimeout(tick, art.classList.contains('real') ? 5200 : 4200);
-    }, 2600);
+    /* 한 번만: 그림 → 사진으로 넘어간 뒤 유지 (탭하면 수동 전환 가능) */
+    artTimer = setTimeout(function () { art.classList.add('real'); }, 2600);
   }
   art.addEventListener('click', function () {
     clearTimeout(artTimer); /* 탭하면 수동 모드 */
