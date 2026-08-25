@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500&family=Great+Vibes&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="preload" as="image" href="assets/illust.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
-<noscript><style>#prologue{display:none}[data-reveal],.fx{opacity:1!important;transform:none!important}#cover::before{display:none}#quicknav{opacity:1;pointer-events:auto}</style></noscript>
+<noscript><style>#prologue{display:none}[data-reveal],.fx{opacity:1!important;transform:none!important}#cover::before{display:none}</style></noscript>
 
 <script type="application/ld+json">
 {
@@ -224,22 +224,6 @@
   #bgmChip.blocked { animation: nudge 2.4s ease-in-out infinite; }
   @keyframes nudge { 0%, 100% { box-shadow: 0 0 0 0 rgba(196,106,126,0); } 50% { box-shadow: 0 0 0 7px rgba(196,106,126,.13); } }
 
-  /* ======================= 퀵바 ======================= */
-  #quicknav {
-    position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 60;
-    display: flex;
-    background: rgba(253, 252, 249, .92);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    overflow: hidden;
-    opacity: 0; pointer-events: none; transform: translateY(6px);
-    transition: opacity .5s ease, transform .5s ease;
-  }
-  .opened #quicknav { opacity: 1; pointer-events: auto; transform: none; }
-  #quicknav a { font-size: 12.5px; color: var(--soft); padding: 10px 17px; letter-spacing: .08em; }
-  #quicknav a + a { border-left: 1px solid var(--line); }
-  #quicknav a:active { background: rgba(38,34,28,.05); }
-
   /* ======================= 대문 ======================= */
   #cover {
     background: var(--lt);
@@ -284,13 +268,9 @@
     opacity: 0; pointer-events: none;
     transition: opacity .9s ease;
   }
-  /* 인물 크기를 일러스트와 맞춘 줌인 상태에서 시작 → 천천히 줌아웃하며 전경 공개 */
   .art .photo img {
     width: 100%; height: 100%; object-fit: cover;
     object-position: 48% 60%;
-    transform: scale(1.07);
-    transform-origin: 48% 58%;
-    transition: transform 3.5s cubic-bezier(.25,.6,.3,1);
   }
   /* 오버레이 텍스트 가독용 스크림 */
   .art .photo::after {
@@ -300,7 +280,6 @@
 
   .art.real .illust { opacity: 0; transform: translate(-50%, -53%) scale(.97); filter: blur(2px); }
   .art.real .photo { opacity: 1; }
-  .art.real .photo img { transform: scale(1); }
   /* 사진 위에서는 텍스트가 크림색으로 */
   .art .ct * { transition: color .9s ease, text-shadow .9s ease; }
   .art.real .script, .art.real .names { color: #F8F3EC; text-shadow: 0 2px 20px rgba(15, 10, 5, .45); }
@@ -308,7 +287,7 @@
   .art.real ~ .cue { background: rgba(248,243,236,.8); }
   .ct { position: absolute; left: 0; right: 0; z-index: 2; text-align: center; pointer-events: none; }
   .ct.top { top: calc(56px + env(safe-area-inset-top)); }
-  .ct.btm { bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .ct.btm { bottom: calc(78px + env(safe-area-inset-bottom)); }
   .names {
     font-family: var(--serif-kr); font-weight: 700;
     font-size: clamp(21px, 5.6vw, 27px);
@@ -694,10 +673,6 @@
   <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
 </button>
 
-<nav id="quicknav" aria-label="빠른 이동">
-  <a href="#gallery">갤러리</a><a href="#info">안내</a>
-</nav>
-
 <main>
   <!-- ======================= 대문 ======================= -->
   <section id="cover" class="pg">
@@ -1061,11 +1036,21 @@
     }
   });
 
-  /* ---------- 대문 높이를 실시간 뷰포트에 고정 (주소창 접힘 대응) ---------- */
+  /* ---------- 대문 높이: 최초 1회 측정 후 고정 ----------
+     인앱 브라우저 툴바가 숨고 나타날 때마다 innerHeight가 출렁여
+     대문이 잘리거나 사진이 커져 보이는 문제 방지. 회전 시에만 재측정. */
   var coverEl = document.getElementById('cover');
-  function fitCover() { coverEl.style.minHeight = window.innerHeight + 'px'; }
+  var coverW = 0;
+  function fitCover() {
+    var h = window.visualViewport ? Math.min(window.innerHeight, window.visualViewport.height) : window.innerHeight;
+    coverEl.style.minHeight = Math.round(h) + 'px';
+    coverEl.style.height = Math.round(h) + 'px';
+    coverW = window.innerWidth;
+  }
   fitCover();
-  window.addEventListener('resize', fitCover);
+  window.addEventListener('resize', function () {
+    if (Math.abs(window.innerWidth - coverW) > 60) fitCover(); /* 회전만 반영 */
+  });
 
   /* ---------- 대문: 그림 ↔ 사진 자동 교차, 꽃잎 ---------- */
   var art = document.getElementById('art');
