@@ -287,7 +287,7 @@
   .art.real ~ .cue { background: rgba(248,243,236,.8); }
   .ct { position: absolute; left: 0; right: 0; z-index: 2; text-align: center; pointer-events: none; }
   .ct.top { top: calc(56px + env(safe-area-inset-top)); }
-  .ct.btm { bottom: calc(78px + env(safe-area-inset-bottom)); }
+  .ct.btm { bottom: 13vh; bottom: 13svh; }
   .names {
     font-family: var(--serif-kr); font-weight: 700;
     font-size: clamp(21px, 5.6vw, 27px);
@@ -300,7 +300,7 @@
     color: var(--faint); margin-top: 10px;
   }
   .cue {
-    position: absolute; bottom: calc(18px + env(safe-area-inset-bottom)); left: 50%;
+    position: absolute; bottom: 5vh; bottom: 5svh; left: 50%;
     width: 1px; height: 30px; background: var(--faint);
     animation: drip 2.2s ease-in-out infinite;
     z-index: 2; transition: background .9s ease;
@@ -681,7 +681,7 @@
         <img class="illust" src="assets/illust.png" width="555" height="750"
              alt="무릎 꿇고 꽃다발을 건네는 찬영과 웃으며 바라보는 유선의 일러스트">
         <figure class="photo">
-          <img src="assets/main.jpg" width="1200" height="1800"
+          <img src="assets/main.jpg" width="1706" height="2560"
                alt="일러스트의 원본 사진 — 상하이의 저녁, 무릎 꿇고 부케를 건네는 순간">
         </figure>
       </div>
@@ -796,7 +796,6 @@
         <path d="M66 27 C67 23 65 20 62 19" /><path d="M60 25 C61 21 59 18 56 17" /><path d="M53 24 C54 20 52 17 49 16" /><path d="M46 23 C47 19 45 16 42 15" />
       </svg>
       <span class="t">GALLERY</span>
-      <span class="s">상하이에서의 하루, 낮부터 밤까지</span>
     </div>
     <div class="reel" id="reel" data-reveal></div>
     <p class="reel-hint">옆으로 넘겨보세요 &middot; 탭하면 크게 볼 수 있어요</p>
@@ -1091,7 +1090,7 @@
   document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
 
   /* ---------- 갤러리: 가로 필름 릴 ---------- */
-  var ORDER = [1, 2, 5, 3, 11, 15, 13, 6, 7, 9, 10, 12, 14, 4, 8, 16, 17, 20, 21, 23, 22, 25, 24, 26, 19, 18, 27];
+  var ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
   var reel = document.getElementById('reel');
   ORDER.forEach(function (n, i) {
     var b = document.createElement('button');
