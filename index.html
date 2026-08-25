@@ -244,7 +244,8 @@
   #cover {
     background: var(--lt);
     min-height: 100dvh;
-    padding: 52px 24px 72px;
+    padding: 0;
+    overflow: hidden;
   }
   #cover::before {
     content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
@@ -265,61 +266,67 @@
     font-weight: 400;
     color: var(--ink);
   }
-  #cover .script { margin-bottom: 2.2vh; }
-  .art {
-    position: relative; cursor: pointer;
-    height: min(46vh, 90vw);
-    height: min(46svh, 90vw);
-  }
+
+  .art { position: absolute; inset: 0; cursor: pointer; }
+  .art .stage { position: absolute; inset: 0; }
   .art .illust {
-    height: 100%; width: auto;
+    position: absolute; left: 50%; top: 50%;
+    height: min(58vh, 96vw);
+    height: min(58svh, 96vw);
+    width: auto;
+    transform: translate(-50%, -53%);
     filter: drop-shadow(0 16px 22px rgba(59,47,30,.15));
     transition: opacity .85s ease, transform .85s ease, filter .85s ease;
   }
   .art .photo {
-    position: absolute; top: 50%; left: 50%;
-    height: 100%; aspect-ratio: 3 / 4;
-    transform: translate(-50%, -50%);
-    margin: 0; border-radius: 10px; overflow: hidden;
-    box-shadow: 0 22px 44px -18px rgba(59,47,30,.4);
+    position: absolute; inset: 0; margin: 0;
+    overflow: hidden;
     opacity: 0; pointer-events: none;
-    transition: opacity .85s ease;
+    transition: opacity .9s ease;
   }
   /* 인물 크기를 일러스트와 맞춘 줌인 상태에서 시작 → 천천히 줌아웃하며 전경 공개 */
   .art .photo img {
     width: 100%; height: 100%; object-fit: cover;
-    transform: scale(1.75);
-    transform-origin: 48% 62%;
-    transition: transform 3.6s cubic-bezier(.25,.6,.3,1);
+    object-position: 48% 60%;
+    transform: scale(1.34);
+    transform-origin: 48% 60%;
+    transition: transform 4.2s cubic-bezier(.25,.6,.3,1);
   }
-  .art .photo figcaption {
-    position: absolute; bottom: 13px; left: 0; right: 0;
-    font-family: var(--serif-kr); font-size: 12px; letter-spacing: .14em;
-    color: rgba(255, 255, 255, .95); text-shadow: 0 1px 10px rgba(0, 0, 0, .55);
-    opacity: 0; transition: opacity .6s ease .3s;
+  /* 오버레이 텍스트 가독용 스크림 */
+  .art .photo::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(rgba(20,15,10,.36) 0%, rgba(20,15,10,0) 30%, rgba(20,15,10,0) 60%, rgba(20,15,10,.4) 100%);
   }
-  .art.real .illust { opacity: 0; transform: scale(.965); filter: blur(2px); }
+
+  .art.real .illust { opacity: 0; transform: translate(-50%, -53%) scale(.97); filter: blur(2px); }
   .art.real .photo { opacity: 1; }
   .art.real .photo img { transform: scale(1); }
-  .art.real .photo figcaption { opacity: .85; }
+  /* 사진 위에서는 텍스트가 크림색으로 */
+  .art .ct * { transition: color .9s ease, text-shadow .9s ease; }
+  .art.real .script, .art.real .names { color: #F8F3EC; text-shadow: 0 2px 20px rgba(15, 10, 5, .45); }
+  .art.real .names-en { color: rgba(248, 243, 236, .8); }
+  .art.real ~ .cue { background: rgba(248,243,236,.8); }
+  .ct { position: absolute; left: 0; right: 0; z-index: 2; text-align: center; pointer-events: none; }
+  .ct.top { top: calc(56px + env(safe-area-inset-top)); }
+  .ct.btm { bottom: calc(64px + env(safe-area-inset-bottom)); }
   .names {
     font-family: var(--serif-kr); font-weight: 700;
     font-size: clamp(21px, 5.6vw, 27px);
     letter-spacing: .34em; text-indent: .34em;
-    margin-top: 2.4vh;
+    color: var(--ink);
   }
   .names-en {
     font-family: var(--sans); font-weight: 400;
     font-size: 10.5px; letter-spacing: .44em; text-indent: .44em;
     color: var(--faint); margin-top: 10px;
   }
-  .when  { font-size: clamp(13px, 3.6vw, 15px); color: var(--soft); letter-spacing: .04em; margin-top: 14px; }
-  .where { font-size: clamp(13px, 3.6vw, 15px); font-weight: 400; color: var(--soft); letter-spacing: .12em; margin-top: 2px; }
   .cue {
     position: absolute; bottom: calc(18px + env(safe-area-inset-bottom)); left: 50%;
     width: 1px; height: 30px; background: var(--faint);
     animation: drip 2.2s ease-in-out infinite;
+    z-index: 2; transition: background .9s ease;
   }
+  .art.real .cue { background: rgba(248,243,236,.85); }
 
   [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .9s ease var(--d, 0s), transform .9s cubic-bezier(.2,.8,.3,1) var(--d, 0s); }
   [data-reveal].in { opacity: 1; transform: none; }
@@ -694,21 +701,24 @@
 <main>
   <!-- ======================= 대문 ======================= -->
   <section id="cover" class="pg">
-    <p class="script fx fx1">We are getting married</p>
-    <div class="art fx fx2" id="art">
-      <img class="illust" src="assets/illust.png" width="555" height="750"
-           alt="무릎 꿇고 꽃다발을 건네는 찬영과 웃으며 바라보는 유선의 일러스트">
-      <figure class="photo">
-        <img src="assets/main.jpg" width="480" height="720" loading="lazy"
-             alt="일러스트의 원본 사진 — 상하이의 저녁, 무릎 꿇고 부케를 건네는 순간">
-        <figcaption>상하이, 그 날의 저녁</figcaption>
-      </figure>
+    <div class="art" id="art">
+      <div class="stage fx fx2">
+        <img class="illust" src="assets/illust.png" width="555" height="750"
+             alt="무릎 꿇고 꽃다발을 건네는 찬영과 웃으며 바라보는 유선의 일러스트">
+        <figure class="photo">
+          <img src="assets/main.jpg" width="480" height="720"
+               alt="일러스트의 원본 사진 — 상하이의 저녁, 무릎 꿇고 부케를 건네는 순간">
+        </figure>
+      </div>
+      <div class="ct top fx fx1">
+        <p class="script">We are getting married</p>
+      </div>
+      <div class="ct btm fx fx3">
+        <h1 class="names">찬영 · 유선</h1>
+        <p class="names-en">CHANYOUNG &amp; YOOSUN</p>
+      </div>
+      <span class="cue" aria-hidden="true"></span>
     </div>
-    <h1 class="names fx fx3">찬영 · 유선</h1>
-    <p class="names-en fx fx3">CHANYOUNG &amp; YOOSUN</p>
-    <p class="when fx fx4" id="whenLine">2026년 11월 1일 일요일 오전 11시</p>
-    <p class="where fx fx4">노블발렌티 삼성</p>
-    <span class="cue" aria-hidden="true"></span>
   </section>
 
   <div class="film-cut" aria-hidden="true"></div>
@@ -1068,10 +1078,9 @@
       artTimer = setTimeout(tick, art.classList.contains('real') ? 5200 : 4200);
     }, 2600);
   }
-  art.addEventListener('click', function (e) {
+  art.addEventListener('click', function () {
     clearTimeout(artTimer); /* 탭하면 수동 모드 */
     art.classList.toggle('real');
-    e.stopPropagation();
   });
   document.addEventListener('click', function (e) {
     if (!document.body.classList.contains('opened')) return;
@@ -1181,7 +1190,6 @@
   else {
     ddayEl.textContent = 'D+' + Math.abs(days);
     document.getElementById('thanksLine').textContent = '함께해 주셔서 감사했습니다';
-    document.getElementById('whenLine').textContent = '2026년 11월 1일, 저희 결혼했습니다';
   }
 
   /* ---------- 복사 & 공유 ---------- */
