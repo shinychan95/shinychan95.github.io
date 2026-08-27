@@ -255,10 +255,9 @@
   .art .stage { position: absolute; inset: 0; }
   .art .illust {
     position: absolute; left: 50%; top: 50%;
-    height: min(58vh, 96vw);
-    height: min(58svh, 96vw);
+    height: 100vh; /* JS가 사진 속 인물 크기에 맞춰 재계산 */
     width: auto;
-    transform: translate(-50%, -53%);
+    transform: translate(-50%, -50%) scale(var(--ilsc, 1));
     filter: drop-shadow(0 16px 22px rgba(59,47,30,.15));
     transition: opacity .85s ease, transform .85s ease, filter .85s ease;
   }
@@ -270,7 +269,7 @@
   }
   .art .photo img {
     width: 100%; height: 100%; object-fit: cover;
-    object-position: 48% 60%;
+    /* object-position은 JS가 인물 중심 크롭으로 계산 */
   }
   /* 오버레이 텍스트 가독용 스크림 */
   .art .photo::after {
@@ -278,7 +277,7 @@
     background: linear-gradient(rgba(20,15,10,.36) 0%, rgba(20,15,10,0) 30%, rgba(20,15,10,0) 60%, rgba(20,15,10,.4) 100%);
   }
 
-  .art.real .illust { opacity: 0; transform: translate(-50%, -53%) scale(.97); filter: blur(2px); }
+  .art.real .illust { --ilsc: .97; opacity: 0; filter: blur(2px); }
   .art.real .photo { opacity: 1; }
   /* 사진 위에서는 텍스트가 크림색으로 */
   .art .ct * { transition: color .9s ease, text-shadow .9s ease; }
@@ -287,7 +286,8 @@
   .art.real ~ .cue { background: rgba(248,243,236,.8); }
   .ct { position: absolute; left: 0; right: 0; z-index: 2; text-align: center; pointer-events: none; }
   .ct.top { top: calc(56px + env(safe-area-inset-top)); }
-  .ct.btm { bottom: 13vh; bottom: 13svh; }
+  .ct.btm { bottom: 13vh; bottom: 13svh; opacity: 0; transition: opacity 1s ease .4s; }
+  .art.real .ct.btm { opacity: 1; }
   .names {
     font-family: var(--serif-kr); font-weight: 700;
     font-size: clamp(21px, 5.6vw, 27px);
@@ -688,7 +688,7 @@
       <div class="ct top fx fx1">
         <p class="script">We are getting married</p>
       </div>
-      <div class="ct btm fx fx3">
+      <div class="ct btm">
         <h1 class="names">찬영 · 유선</h1>
         <p class="names-en">CHANYOUNG &amp; YOOSUN</p>
       </div>
@@ -967,6 +967,8 @@
   });
 
   openBtn.addEventListener('click', function () {
+    fitCover(); /* 열리는 순간의 실제 화면으로 최종 고정 */
+    frozen = true;
     document.body.classList.add('opened');
     root.classList.remove('locked');
     setTimeout(function () { prologue.remove(); }, 1800);
@@ -1035,27 +1037,55 @@
     }
   });
 
-  /* ---------- 대문 높이: 최초 1회 측정 후 고정 ----------
-     인앱 브라우저 툴바가 숨고 나타날 때마다 innerHeight가 출렁여
-     대문이 잘리거나 사진이 커져 보이는 문제 방지. 회전 시에만 재측정. */
+  /* ---------- 대문 레이아웃 ----------
+     사진의 cover-크롭을 직접 계산해 인물 중심으로 잡고,
+     일러스트를 사진 속 인물과 같은 크기·위치에 겹쳐 배치한다.
+     높이는 '펼치기' 순간에 최종 측정 후 고정 (인앱 툴바 출렁임 대응). */
   var coverEl = document.getElementById('cover');
-  var coverW = 0;
+  var illustEl = document.querySelector('.art .illust');
+  var photoImg = document.querySelector('.art .photo img');
+  /* 사진(1706x2560) 속 인물 박스 / 일러스트(555x750) 속 인물 비율 */
+  var PW = 1706, PH = 2560, CX = 825, CY = 1690, CH = 1360;
+  var ILL_CH = 0.975, ILL_CY = 0.472, ILL_CX = 0.486;
+  var coverW = 0, frozen = false;
+
   function fitCover() {
     var h = window.visualViewport ? Math.min(window.innerHeight, window.visualViewport.height) : window.innerHeight;
-    coverEl.style.minHeight = Math.round(h) + 'px';
-    coverEl.style.height = Math.round(h) + 'px';
-    coverW = window.innerWidth;
+    h = Math.round(h);
+    var w = window.innerWidth;
+    coverEl.style.minHeight = h + 'px';
+    coverEl.style.height = h + 'px';
+    coverW = w;
+    /* cover-fit 스케일과 인물 중심 크롭 */
+    var scl = Math.max(w / PW, h / PH);
+    var winW = w / scl, winH = h / scl;
+    var left = Math.min(Math.max(CX - winW / 2, 0), PW - winW);
+    var top = Math.min(Math.max(CY - winH * 0.54, 0), PH - winH);
+    photoImg.style.objectPosition = (-left * scl) + 'px ' + (-top * scl) + 'px';
+    /* 일러스트를 사진 인물과 동일 크기·위치로 */
+    var illH = (CH * scl) / ILL_CH;
+    var cx = (CX - left) * scl + (0.5 - ILL_CX) * illH * (555 / 750);
+    var cy = (CY - top) * scl + (0.5 - ILL_CY) * illH;
+    illustEl.style.height = illH + 'px';
+    illustEl.style.left = cx + 'px';
+    illustEl.style.top = cy + 'px';
   }
   fitCover();
-  window.addEventListener('resize', function () {
-    if (Math.abs(window.innerWidth - coverW) > 60) fitCover(); /* 회전만 반영 */
-  });
+  function liveFit() {
+    if (!frozen) fitCover();
+    else if (Math.abs(window.innerWidth - coverW) > 60) fitCover(); /* 고정 후엔 회전만 */
+  }
+  window.addEventListener('resize', liveFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', liveFit);
 
   /* ---------- 대문: 그림 ↔ 사진 자동 교차, 꽃잎 ---------- */
   var art = document.getElementById('art');
   var artTimer = null;
   function startArtLoop() {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      art.classList.add('real');
+      return;
+    }
     /* 한 번만: 그림 → 사진으로 넘어간 뒤 유지 (탭하면 수동 전환 가능) */
     artTimer = setTimeout(function () { art.classList.add('real'); }, 2600);
   }
