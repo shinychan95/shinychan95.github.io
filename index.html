@@ -251,7 +251,12 @@
     color: var(--ink);
   }
 
-  .art { position: absolute; inset: 0; cursor: pointer; }
+  .art {
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* JS: min(화면폭, 높이×사진비율) — 넓은 화면에선 세로 컬럼 */
+    cursor: pointer;
+  }
   .art .stage { position: absolute; inset: 0; }
   .art .illust {
     position: absolute; left: 50%; top: 50%;
@@ -1042,6 +1047,7 @@
      일러스트를 사진 속 인물과 같은 크기·위치에 겹쳐 배치한다.
      높이는 '펼치기' 순간에 최종 측정 후 고정 (인앱 툴바 출렁임 대응). */
   var coverEl = document.getElementById('cover');
+  var artEl = document.getElementById('art');
   var illustEl = document.querySelector('.art .illust');
   var photoImg = document.querySelector('.art .photo img');
   /* 사진(1706x2560) 속 인물 박스 / 일러스트(555x750) 속 인물 비율 */
@@ -1056,9 +1062,12 @@
     coverEl.style.minHeight = h + 'px';
     coverEl.style.height = h + 'px';
     coverW = w;
-    /* cover-fit 스케일과 인물 중심 크롭 */
-    var scl = Math.max(w / PW, h / PH);
-    var winW = w / scl, winH = h / scl;
+    /* 모바일 기준 세로 스테이지: 넓은 화면에선 사진 전체가 보이는 중앙 컬럼 */
+    var stageW = Math.min(w, Math.round(h * PW / PH));
+    artEl.style.width = stageW + 'px';
+    /* cover-fit 스케일과 인물 중심 크롭 (스테이지 폭 기준) */
+    var scl = Math.max(stageW / PW, h / PH);
+    var winW = stageW / scl, winH = h / scl;
     var left = Math.min(Math.max(CX - winW / 2, 0), PW - winW);
     var top = Math.min(Math.max(CY - winH * 0.54, 0), PH - winH);
     photoImg.style.objectPosition = (-left * scl) + 'px ' + (-top * scl) + 'px';
