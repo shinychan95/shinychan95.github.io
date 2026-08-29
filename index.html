@@ -416,23 +416,22 @@
     border-top: 1px solid rgba(239, 230, 220, .22);
     border-bottom: 1px solid rgba(239, 230, 220, .22);
     box-shadow: 0 22px 44px -22px rgba(0, 0, 0, .8);
-    cursor: pointer;
   }
   @supports not (aspect-ratio: 1) { .scene .still { height: 218px; } }
+  /* --w: 스크롤 진행도(0=흑백, 1=컬러). JS가 매 프레임 갱신한다 */
   .scene .still img {
     width: 100%; height: 100%; object-fit: cover;
-    filter: grayscale(1) contrast(1.06) brightness(.9);
-    transition: filter 2.8s ease;
+    filter:
+      grayscale(calc(1 - var(--w, 0)))
+      contrast(calc(1.06 - .06 * var(--w, 0)))
+      brightness(calc(.9 + .1 * var(--w, 0)));
   }
-  .scene.warm .still img { filter: none; }
   .scene .grain {
     position: absolute; inset: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
     background-size: 140px;
-    opacity: .26; mix-blend-mode: overlay;
-    transition: opacity 2.8s ease;
+    opacity: calc(.26 - .16 * var(--w, 0)); mix-blend-mode: overlay;
   }
-  .scene.warm .grain { opacity: .1; }
   /* 지원 브라우저에선 스크롤에 따라 천천히 팬 (Ken Burns) */
   @supports (animation-timeline: view()) {
     .scene .still img {
@@ -457,24 +456,10 @@
     line-height: 2.05;
     color: var(--ink-onblk);
   }
-  /* 먼저 쓰인 문장이 다 사라진 뒤에 다음 문장이 떠오른다 */
-  .scene .cap .c1 { transition: opacity 1.1s ease; }
-  .scene .cap .c2 { opacity: 0; color: #FBF5EE; transition: opacity 1.3s ease 1.05s; }
-  .scene.warm .cap .c1 { opacity: 0; }
-  .scene.warm .cap .c2 { opacity: 1; }
+  /* 먼저 쓰인 문장이 다 사라진 뒤에 다음 문장이 떠오른다 — 둘 다 스크롤에 물려 있다 */
+  .scene .cap .c1 { opacity: calc(1 - var(--w1, 0)); }
+  .scene .cap .c2 { opacity: var(--w2, 0); color: #FBF5EE; }
   .scene .yr { font-family: var(--display); font-style: italic; font-size: 13.5px; letter-spacing: .18em; color: var(--soft-onblk); margin-top: 3vh; }
-  /* 아직 찍지 않은 장면 — 비어 있는 프레임 */
-  .scene .still.empty {
-    background: #0C0A08;
-    border: 1px dashed rgba(239, 230, 220, .2);
-    display: grid; place-items: center;
-    cursor: default;
-  }
-  .scene .still.empty .slate {
-    font-family: var(--mono); font-size: 10.5px;
-    letter-spacing: .34em; text-indent: .34em;
-    color: rgba(185, 171, 156, .55);
-  }
 
   /* ======================= 갤러리 — 가로 필름 릴 (블러시) ======================= */
   #gallery { background: var(--lt); padding: 100px 0 84px; text-align: center; }
@@ -542,10 +527,22 @@
     text-align: left;
     display: block;
   }
-  .blog-card .bk { font-family: var(--display); font-weight: 500; font-size: 11px; letter-spacing: .34em; color: var(--rose); }
-  .blog-card .bt { font-family: var(--serif-kr); font-weight: 700; font-size: 17px; margin-top: 8px; line-height: 1.6; }
-  .blog-card .bd { font-size: 12.5px; color: var(--soft); margin-top: 6px; }
-  .blog-card .go { font-size: 12.5px; color: var(--rose); margin-top: 14px; letter-spacing: .06em; }
+  .blog-card .bk {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    font-family: var(--display); font-weight: 500; font-size: 11px; letter-spacing: .34em; color: var(--rose);
+  }
+  .blog-card .bk svg { width: 15px; height: 15px; flex: none; opacity: .75; }
+  .blog-card .bt { font-family: var(--serif-kr); font-weight: 700; font-size: 17px; margin-top: 10px; line-height: 1.6; }
+  .blog-card .bd { font-size: 12.5px; color: var(--soft); margin-top: 7px; line-height: 1.75; word-break: keep-all; }
+  .blog-card .go {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin-top: 16px; padding-top: 13px;
+    border-top: 1px dashed var(--line);
+    font-size: 12.5px; letter-spacing: .02em;
+  }
+  .blog-card .bhost { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .blog-card .bcta { color: var(--rose); font-weight: 400; }
+  .blog-card.ready .bcta::after { content: " →"; }
   .blog-card:active { transform: scale(.985); }
 
   /* ======================= 안내 — 항목별 독립 섹션 (페이퍼) ======================= */
@@ -640,7 +637,17 @@
   summary::after { content: "+"; color: var(--faint); font-size: 16px; transition: transform .3s; }
   details[open] summary::after { transform: rotate(45deg); }
 
-  .share-row { display: flex; justify-content: center; gap: 28px; padding: 8px 0 4px; }
+  .share-row { display: flex; justify-content: center; gap: 12px; margin-top: 6vh; }
+  /* 검은 배경 위의 공유 버튼 */
+  footer .txt-btn {
+    color: var(--soft-onblk);
+    border-color: var(--line-onblk);
+  }
+  footer .txt-btn:active {
+    color: var(--rose-soft);
+    border-color: rgba(224, 142, 159, .45);
+    background: rgba(224, 142, 159, .08);
+  }
 
   #toast {
     position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 90;
@@ -762,6 +769,13 @@
     color: var(--ink-onblk); margin-top: 22px;
   }
   footer .credit { font-family: var(--mono); font-size: 10px; color: rgba(185,171,156,.6); letter-spacing: .18em; margin-top: 42px; }
+  /* 음원 출처는 여기에 슬그머니 */
+  footer .made-note {
+    font-size: 11px; line-height: 1.7; letter-spacing: .02em;
+    color: rgba(185, 171, 156, .42);
+    margin-top: 9px;
+  }
+  footer .made-note i { font-family: var(--display); font-style: italic; letter-spacing: .05em; }
 
   /* 꽃잎 */
   .petal {
@@ -818,9 +832,7 @@
     /* 크레딧은 정지 목록으로, 스틸은 컬러로 */
     .credits { height: auto; -webkit-mask-image: none; mask-image: none; }
     .credits .roll { transform: none; animation: none !important; }
-    .scene .still img { filter: none; transform: none; }
-    .scene .cap .c1 { opacity: 0; }
-    .scene .cap .c2 { opacity: 1; }
+    .scene .still img { transform: none; }
   }
 </style>
 </head>
@@ -857,7 +869,7 @@
   <button id="openBtn" type="button">청첩장 열기</button>
 </div>
 
-<button id="bgmChip" type="button" aria-label="배경음악 켜기/끄기" aria-pressed="false">
+<button id="bgmChip" type="button" aria-label="배경음악 켜기/끄기 — 유선이 직접 연주한 피아노" aria-pressed="false">
   <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
 </button>
 
@@ -1001,19 +1013,6 @@
     <p class="yr" data-reveal style="--d:.2s">2026</p>
   </section>
 
-  <section id="scene4" class="pg scene">
-    <p class="no" data-reveal>SCENE 04</p>
-    <h3 data-reveal style="--d:.05s">아직 찍지 않은 장면</h3>
-    <figure class="still empty" data-reveal style="--d:.1s" aria-hidden="true">
-      <span class="slate">촬영 예정</span>
-      <span class="grain"></span>
-    </figure>
-    <div class="cap" data-reveal style="--d:.15s">
-      <p>이 장면에는<br>빈자리가 하나 있습니다.</p>
-    </div>
-    <p class="yr" data-reveal style="--d:.2s">2026. 11. 01.</p>
-  </section>
-
   <div class="film-cut" aria-hidden="true"></div>
 
   <!-- ======================= 갤러리 ======================= -->
@@ -1041,15 +1040,23 @@
       <span class="t">OUR STORY</span>
     </div>
     <p class="desc" data-reveal style="--d:.1s">
-      <span>축하하러 와주시는 마음에 보답하고 싶어,</span>
-      <span class="hl">저희의 지난 시간들을 짧은 글로 정리해 두었어요.</span>
+      <span>어떻게 만나 여기까지 왔는지,</span>
+      <span class="hl">블로그에 긴 글로 적어두었습니다.</span>
     </p>
-    <!-- TODO(블로그): href를 실제 블로그 글 주소로 교체 -->
-    <a class="blog-card" href="#" id="blogLink" data-reveal style="--d:.2s" aria-disabled="true">
-      <p class="bk">BEHIND STORY</p>
-      <p class="bt">찬영과 유선의 지난 시간들</p>
-      <p class="bd">두 사람의 근황과 이야기 · 글로 만나기</p>
-      <p class="go" id="blogGo">준비 중이에요 — 곧 열립니다</p>
+    <!-- TODO(블로그): href를 실제 블로그 글 주소로 교체하고, .bhost 도메인도 맞춰 주세요 -->
+    <a class="blog-card" href="#" id="blogLink" target="_blank" rel="noopener" data-reveal style="--d:.2s" aria-disabled="true">
+      <p class="bk">
+        <span>BLOG POST</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 4h6v6M20 4 11 13M18 14v5a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19V8.2A1.6 1.6 0 0 1 5.6 6.6H10"/>
+        </svg>
+      </p>
+      <p class="bt">찬영과 유선의 지난 이야기</p>
+      <p class="bd">처음 만난 날부터 청혼까지, 사진과 함께 적은 기록이에요.</p>
+      <p class="go" id="blogGo">
+        <span class="bhost">shinychan95.com</span>
+        <span class="bcta">준비 중이에요 &mdash; 곧 열립니다</span>
+      </p>
     </a>
   </section>
 
@@ -1110,38 +1117,39 @@
         </p>
       </div>
 
-      <!-- 약도: 봉은사역·수도빌딩(제2주차장)은 서쪽, 예식장은 봉은사로를 따라 동쪽 -->
+      <!-- 약도: 수도빌딩(제2주차장)은 봉은사역 사거리 남동쪽 모서리, 봉은사로에 바로 붙어 있다.
+           역 이름표가 그 자리를 차지하지 않도록 사거리 남서쪽으로 뺐다. -->
       <figure class="loc-map" aria-label="약도 — 9호선 봉은사역 4번 출구에서 봉은사로를 따라 동쪽으로 도보 3분">
-        <svg viewBox="0 0 320 200" role="img">
+        <svg viewBox="0 0 320 184" role="img">
           <!-- 도로 -->
           <rect class="road" x="0" y="100" width="320" height="22"/>
-          <rect class="road" x="40" y="0" width="22" height="200"/>
-          <line class="dash" x1="6" y1="111" x2="36" y2="111"/>
-          <line class="dash" x1="66" y1="111" x2="314" y2="111"/>
-          <line class="dash" x1="51" y1="6" x2="51" y2="96"/>
-          <line class="dash" x1="51" y1="126" x2="51" y2="174"/>
-          <text x="51" y="14" text-anchor="middle">영동대로</text>
+          <rect class="road" x="50" y="0" width="22" height="184"/>
+          <line class="dash" x1="6" y1="111" x2="46" y2="111"/>
+          <line class="dash" x1="76" y1="111" x2="314" y2="111"/>
+          <line class="dash" x1="61" y1="6" x2="61" y2="96"/>
+          <line class="dash" x1="61" y1="126" x2="61" y2="158"/>
+          <text x="61" y="14" text-anchor="middle">영동대로</text>
           <text x="280" y="115" text-anchor="middle">봉은사로</text>
-          <text x="51" y="192" text-anchor="middle">&#8595; 2호선 삼성역</text>
-          <!-- 봉은사역 (9호선) -->
-          <circle cx="51" cy="111" r="10" fill="#BDA25C"/>
-          <text class="onpin" x="51" y="114.5" text-anchor="middle" font-weight="700">9</text>
-          <text x="66" y="136" text-anchor="start">봉은사역</text>
+          <text x="61" y="176" text-anchor="middle">&#8595; 2호선 삼성역</text>
+          <!-- 봉은사역 (9호선) — 사거리 -->
+          <circle cx="61" cy="111" r="10" fill="#BDA25C"/>
+          <text class="onpin" x="61" y="114.5" text-anchor="middle" font-weight="700">9</text>
+          <text x="44" y="139" text-anchor="end">봉은사역</text>
           <!-- 4번 출구에서 예식장까지 -->
-          <circle cx="86" cy="94" r="3.4" fill="var(--rose)"/>
-          <text class="accent" x="94" y="86" text-anchor="start">4번 출구</text>
-          <path class="walk" d="M92 92 C 140 89, 190 82, 232 72"/>
-          <text class="accent" x="170" y="74" text-anchor="middle">도보 3분</text>
+          <circle cx="88" cy="94" r="3.4" fill="var(--rose)"/>
+          <text class="accent" x="96" y="86" text-anchor="start">4번 출구</text>
+          <path class="walk" d="M94 92 C 140 89, 190 82, 232 72"/>
+          <text class="accent" x="172" y="74" text-anchor="middle">도보 3분</text>
           <!-- 예식장 -->
           <text class="venue-nm" x="248" y="28" text-anchor="middle">노블발렌티 삼성</text>
           <g transform="translate(248 56)">
             <path d="M0 20 C -10 8, -13 -2, -13 -6 A 13 13 0 1 1 13 -6 C 13 -2, 10 8, 0 20 Z" fill="var(--rose)"/>
             <text class="onpin" y="-2" text-anchor="middle">&#9829;</text>
           </g>
-          <!-- 제2주차장 (수도빌딩) — 봉은사역 바로 옆 -->
-          <rect x="98" y="150" width="19" height="19" rx="6" fill="none" stroke="var(--faint)" stroke-width="1.2"/>
-          <text x="107.5" y="163.5" text-anchor="middle" font-weight="500">P</text>
-          <text x="124" y="163.5" text-anchor="start">제2주차장 &middot; 수도빌딩</text>
+          <!-- 제2주차장 (수도빌딩) — 사거리 바로 아래, 도로에 붙여서 -->
+          <rect x="82" y="127" width="17" height="17" rx="5.5" fill="none" stroke="var(--faint)" stroke-width="1.2"/>
+          <text x="90.5" y="139" text-anchor="middle" font-weight="500">P</text>
+          <text x="105" y="139" text-anchor="start">제2주차장 &middot; 수도빌딩</text>
         </svg>
       </figure>
 
@@ -1252,25 +1260,7 @@
     </div>
   </section>
 
-  <!-- ======================= 공유 ======================= -->
-  <section id="share" class="info-sec">
-    <div class="label" data-reveal>
-      <svg class="laurel" viewBox="0 0 80 34" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
-        <path d="M12 28 C20 30 32 30 40 27" /><path d="M68 28 C60 30 48 30 40 27" />
-        <path d="M14 27 C13 23 15 20 18 19" /><path d="M20 25 C19 21 21 18 24 17" /><path d="M27 24 C26 20 28 17 31 16" /><path d="M34 23 C33 19 35 16 38 15" />
-        <path d="M66 27 C67 23 65 20 62 19" /><path d="M60 25 C61 21 59 18 56 17" /><path d="M53 24 C54 20 52 17 49 16" /><path d="M46 23 C47 19 45 16 42 15" />
-      </svg>
-      <span class="t">SHARE</span>
-    </div>
-    <div class="card" data-reveal>
-      <div class="share-row">
-        <!-- TODO(카카오): Kakao Developers 앱 생성 + 도메인 등록 후 SDK 공유 버튼 추가 -->
-        <button class="txt-btn" id="shareBtn" type="button">공유하기</button>
-        <button class="txt-btn" id="linkBtn" type="button">링크 복사</button>
-      </div>
-    </div>
-  </section>
-
+  <!-- ======================= 엔드 크레딧 · 공유 ======================= -->
   <div class="film-cut" aria-hidden="true"></div>
 
   <footer id="footer">
@@ -1279,16 +1269,22 @@
     <!-- 엔드 크레딧 롤 — 화면에 들어오면 1회 재생, 탭하면 다시 재생 -->
     <div class="credits" id="credits" data-reveal style="--d:.25s" aria-label="엔드 크레딧">
       <div class="roll">
-        <div class="cr"><p class="ck">A FILM BY</p><p class="cv"><i>Chanyoung &amp; Yoosun</i></p></div>
         <div class="cr"><p class="ck">DIRECTED BY</p><p class="cv">김찬영 &middot; 남유선</p></div>
         <div class="cr"><p class="ck">EXECUTIVE PRODUCERS</p><p class="cv">김대열 &middot; 채은희<br>남성우 &middot; 노진숙</p></div>
         <div class="cr"><p class="ck">STARRING</p><p class="cv">그동안 두 사람의 장면마다<br>함께해 주신 모든 분들</p></div>
         <div class="cr"><p class="ck">SPECIAL THANKS TO</p><p class="cv">지금 이 글을 읽고 있는<br>당신</p></div>
+        <div class="cr"><p class="ck">MUSIC</p><p class="cv"><i>Mid Air</i><br>피아노 &mdash; 남유선</p></div>
         <div class="cr"><p class="ck">NOW SHOWING</p><p class="cv">2026. 11. 01. 오전 11시<br>노블발렌티 삼성</p></div>
       </div>
     </div>
     <p class="sig" data-reveal style="--d:.35s">Chanyoung &amp; Yoosun</p>
+    <div class="share-row" data-reveal style="--d:.45s">
+      <!-- TODO(카카오): Kakao Developers 앱 생성 + 도메인 등록 후 SDK 공유 버튼 추가 -->
+      <button class="txt-btn" id="shareBtn" type="button">공유하기</button>
+      <button class="txt-btn" id="linkBtn" type="button">링크 복사</button>
+    </div>
     <p class="credit">MADE BY CHANYOUNG, WITH YOOSUN</p>
+    <p class="made-note">지금 흐르는 <i>Mid Air</i>, 유선이 직접 친 피아노입니다</p>
   </footer>
 </main>
 
@@ -1491,7 +1487,7 @@
       return;
     }
     /* 한 번만: 그림 → 사진으로 넘어간 뒤 유지 (탭하면 수동 전환 가능) */
-    artTimer = setTimeout(function () { art.classList.add('real'); }, 2600);
+    artTimer = setTimeout(function () { art.classList.add('real'); }, 1600);
   }
   art.addEventListener('click', function () {
     clearTimeout(artTimer); /* 탭하면 수동 모드 */
@@ -1557,25 +1553,45 @@
     paintQuote();
   }
 
-  /* ---------- SCENE: 흑백으로 만나고, 머무는 사이 컬러로 — "같은 순간을 두 번 보기" ---------- */
-  var sceneIO = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (!en.isIntersecting) return;
-      var sc = en.target;
-      sceneIO.unobserve(sc);
-      setTimeout(function () { sc.classList.add('warm'); }, 2600);
-    });
-  }, { threshold: 0.45 });
-  document.querySelectorAll('.scene').forEach(function (sc) {
-    var still = sc.querySelector('.still:not(.empty)');
-    if (!still) return;
-    sceneIO.observe(sc);
-    /* 탭하면 그날을 다시 오갈 수 있다 */
-    still.addEventListener('click', function (e) {
-      e.stopPropagation();
-      sc.classList.toggle('warm');
-    });
-  });
+  /* ---------- SCENE: 스크롤을 내리는 만큼 흑백이 컬러로, 문장이 다음 문장으로 ----------
+     스틸이 화면을 지나가는 동안 0 → 1. 되돌리면 다시 흑백으로 돌아온다. */
+  var scenes = [].slice.call(document.querySelectorAll('.scene'));
+  if (scenes.length) {
+    var ramp = function (v, a, b) {
+      var t = (v - a) / (b - a);
+      return t < 0 ? 0 : t > 1 ? 1 : t;
+    };
+    var sTicking = false;
+    var paintScenes = function () {
+      sTicking = false;
+      var vh = window.innerHeight || 1;
+      scenes.forEach(function (sc) {
+        var st = sc.querySelector('.still');
+        if (!st) return;
+        var top = st.getBoundingClientRect().top;
+        var prog = (vh * 0.75 - top) / (vh * 0.62);
+        sc.style.setProperty('--w', ramp(prog, .20, .74).toFixed(3));
+        sc.style.setProperty('--w1', ramp(prog, .32, .48).toFixed(3));
+        sc.style.setProperty('--w2', ramp(prog, .50, .66).toFixed(3));
+      });
+    };
+    var onSceneScroll = function () {
+      if (sTicking) return;
+      sTicking = true;
+      requestAnimationFrame(paintScenes);
+    };
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      scenes.forEach(function (sc) {
+        sc.style.setProperty('--w', '1');
+        sc.style.setProperty('--w1', '1');
+        sc.style.setProperty('--w2', '1');
+      });
+    } else {
+      window.addEventListener('scroll', onSceneScroll, { passive: true });
+      window.addEventListener('resize', onSceneScroll);
+      paintScenes();
+    }
+  }
 
   /* ---------- 엔드 크레딧 롤 ---------- */
   var footerEl = document.getElementById('footer');
@@ -1707,13 +1723,22 @@
     copy(location.href, '링크가 복사되었습니다');
   });
 
-  /* 블로그 링크 — href가 '#'인 동안은 준비 중 안내 */
-  document.getElementById('blogLink').addEventListener('click', function (e) {
-    if (this.getAttribute('href') === '#') {
+  /* 블로그 링크 — href가 '#'인 동안은 준비 중 안내, 주소가 채워지면 CTA를 바꾼다 */
+  var blogLink = document.getElementById('blogLink');
+  if (blogLink.getAttribute('href') === '#') {
+    blogLink.removeAttribute('target');
+    blogLink.addEventListener('click', function (e) {
       e.preventDefault();
       toast('이야기는 곧 열릴 예정이에요');
-    }
-  });
+    });
+  } else {
+    blogLink.classList.add('ready');
+    blogLink.removeAttribute('aria-disabled');
+    document.querySelector('#blogGo .bcta').textContent = '블로그에서 읽기';
+    try {
+      document.querySelector('#blogGo .bhost').textContent = new URL(blogLink.href).hostname.replace(/^www\./, '');
+    } catch (e) {}
+  }
 
   /* ESC로 오버레이 닫기 */
   document.addEventListener('keydown', function (e) {
