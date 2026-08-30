@@ -69,6 +69,14 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   /* scroll-snap은 사용하지 않는다 — 모바일 크롬 앵커 점프·재스냅 버그 회피, 자유 스크롤 확정 */
   html { scroll-behavior: smooth; }
+  /* 좌우 드래그로 화면이 밀리지 않게. .film-cut이 scaleX(1.14)로 뷰포트보다 넓어
+     문서에 가로 스크롤 영역이 생기는데, hidden은 인앱 브라우저(카카오톡 등)에서
+     터치 패닝을 못 막는 경우가 있다. clip은 스크롤 컨테이너 자체를 만들지 않아
+     가로로 끌 것이 아예 없어진다. */
+  html { overflow-x: hidden; overscroll-behavior-x: none; }
+  @supports (overflow-x: clip) {
+    html { overflow-x: clip; }
+  }
   html.locked { overflow: hidden; }
   body {
     background: var(--lt);
@@ -76,7 +84,6 @@
     font-family: var(--sans);
     font-weight: 300;
     line-height: 1.8;
-    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
