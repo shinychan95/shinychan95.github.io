@@ -419,11 +419,16 @@
     color: var(--ink-onblk);
     margin-bottom: 3.4vh;
   }
+  /* 한 장면에 여러 컷 — 세로로 이어 붙인 필름처럼 */
+  .scene .stills {
+    display: grid; gap: 8px;
+    width: 100%; max-width: 440px; margin: 0 auto;
+  }
+  /* 세로 사진 두 장은 나란히 (세로로 쌓으면 화면을 넘어간다) */
+  .scene .stills.side { grid-template-columns: 1fr 1fr; }
   .scene .still {
     position: relative;
-    width: 100%; max-width: 440px;
-    aspect-ratio: 16 / 10;
-    margin: 0 auto;
+    aspect-ratio: var(--ar, 16 / 10);
     overflow: hidden;
     border-radius: 4px;
     /* 레터박스 — 스크린 위아래 얇은 빛 */
@@ -431,7 +436,7 @@
     border-bottom: 1px solid rgba(239, 230, 220, .22);
     box-shadow: 0 22px 44px -22px rgba(0, 0, 0, .8);
   }
-  @supports not (aspect-ratio: 1) { .scene .still { height: 218px; } }
+  @supports not (aspect-ratio: 1) { .scene .still { height: 190px; } }
   /* --w: 스크롤 진행도(0=흑백, 1=컬러). JS가 매 프레임 갱신한다 */
   .scene .still img {
     width: 100%; height: 100%; object-fit: cover;
@@ -990,42 +995,66 @@
        c1 = 처음 보이는 문장(흑백), c2 = 다시 봤을 때의 문장(컬러). 스틸을 탭하면 다시 오갈 수 있다. -->
   <section id="scene1" class="pg scene">
     <p class="no" data-reveal>SCENE 01</p>
-    <h3 data-reveal style="--d:.05s">처음 만난 날</h3>
-    <figure class="still" data-reveal style="--d:.1s">
-      <img src="assets/photos/snap11.jpg" alt="나란히 앉아 웃고 있는 두 사람" loading="lazy" decoding="async">
-      <span class="grain" aria-hidden="true"></span>
-    </figure>
-    <div class="cap" data-reveal style="--d:.15s">
-      <p class="c1">어느 평범한 날이었습니다.</p>
-      <p class="c2">지금 와서 보니,<br>하나도 평범하지 않았네요.</p>
+    <h3 data-reveal style="--d:.05s">건강검진센터 대기실</h3>
+    <div class="stills" data-reveal style="--d:.1s">
+      <figure class="still" style="--ar: 1000 / 350">
+        <img src="assets/photos/scene1-1.jpg" alt="온라인 신입 교육 화상 화면. 찬영과 유선의 창이 나란히 놓여 있다" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
+      <figure class="still" style="--ar: 1000 / 377">
+        <img src="assets/photos/scene1-2.jpg" alt="화상으로 함께 점심을 먹는 동기들. 각자 도시락을 들어 보이고 있다" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
+      <figure class="still" style="--ar: 1100 / 466">
+        <img src="assets/photos/scene1-3.jpg" alt="건강검진센터 대기실에서 서로를 알아보는 장면을 그린 그림. 휴대폰에 「혹시 유선씨 맞으신가요?」 메시지가 떠 있다" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
     </div>
-    <p class="yr" data-reveal style="--d:.2s">20──</p>
+    <div class="cap" data-reveal style="--d:.15s">
+      <p class="c1">같은 해에 입사했지만,<br>서로 화면으로만 봤습니다.</p>
+      <p class="c2">「혹시 유선씨 맞으신가요?」<br>그날 처음 같이 밥을 먹었습니다.</p>
+    </div>
+    <p class="yr" data-reveal style="--d:.2s">2021. 12. 17.</p>
   </section>
   <section id="scene2" class="pg scene">
     <p class="no" data-reveal>SCENE 02</p>
-    <h3 data-reveal style="--d:.05s">함께 걸어온 시간</h3>
-    <figure class="still" data-reveal style="--d:.1s">
-      <img src="assets/photos/snap22.jpg" alt="나란히 걷는 두 사람의 옆모습" loading="lazy" decoding="async">
-      <span class="grain" aria-hidden="true"></span>
-    </figure>
-    <div class="cap" data-reveal style="--d:.15s">
-      <p class="c1">계절이 몇 번 바뀌었습니다.</p>
-      <p class="c2">그 사이 입맛도, 웃는 타이밍도<br>닮아버렸습니다.</p>
+    <h3 data-reveal style="--d:.05s">다시, 화면 너머로</h3>
+    <div class="stills" data-reveal style="--d:.1s">
+      <figure class="still" style="--ar: 1000 / 561">
+        <img src="assets/photos/scene2-1.jpg" alt="책상 위 모니터에 영상통화로 연결된 유선이 무언가를 먹고 있다" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
+      <figure class="still" style="--ar: 1000 / 750">
+        <img src="assets/photos/scene2-2.jpg" alt="영상통화를 켜둔 채 침대에 누워 잠든 모습" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
     </div>
-    <p class="yr" data-reveal style="--d:.2s">20── ~</p>
+    <div class="cap" data-reveal style="--d:.15s">
+      <p class="c1">어렵게 만났더니<br>이번엔 대부분 화상이었습니다.</p>
+      <p class="c2">각자 방에서 같이 밥을 먹고,<br>통화하다 그대로 잠들었습니다.</p>
+    </div>
+    <!-- TODO(연도): 화상 데이트 시기 확인 후 교체 -->
+    <p class="yr" data-reveal style="--d:.2s">2021 &ndash; 2022</p>
   </section>
   <section id="scene3" class="pg scene">
     <p class="no" data-reveal>SCENE 03</p>
-    <h3 data-reveal style="--d:.05s">그리고, 약속</h3>
-    <figure class="still" data-reveal style="--d:.1s">
-      <img src="assets/photos/snap17.jpg" alt="밤거리에서 서로에게 손을 내미는 두 사람" loading="lazy" decoding="async">
-      <span class="grain" aria-hidden="true"></span>
-    </figure>
-    <div class="cap" data-reveal style="--d:.15s">
-      <p class="c1">한 사람이 무릎을 꿇었습니다.</p>
-      <p class="c2">다른 한 사람은,<br>이미 답을 알고 있었고요.</p>
+    <h3 data-reveal style="--d:.05s">결혼하자는 말</h3>
+    <div class="stills side" data-reveal style="--d:.1s">
+      <figure class="still" style="--ar: 3 / 4">
+        <img src="assets/photos/scene3-1.jpg" alt="천 일 기념 케이크와 꽃다발, 목걸이가 놓인 테이블" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
+      <figure class="still" style="--ar: 3 / 4">
+        <img src="assets/photos/scene3-2.jpg" alt="「나랑 결혼해 줄래?」 가랜드와 풍선, 촛불로 꾸민 프러포즈 자리" loading="lazy" decoding="async">
+        <span class="grain" aria-hidden="true"></span>
+      </figure>
     </div>
-    <p class="yr" data-reveal style="--d:.2s">2026</p>
+    <div class="cap" data-reveal style="--d:.15s">
+      <p class="c1">천 일째 되는 날,<br>이제 준비를 시작하자고 했습니다.</p>
+      <p class="c2">그리고 얼마 뒤,<br>풍선 사이에서 다시 물었습니다.</p>
+    </div>
+    <!-- TODO(연도): 천 일 · 프러포즈 날짜 확인 후 교체 -->
+    <p class="yr" data-reveal style="--d:.2s">2024 &ndash; 2026</p>
   </section>
 
   <div class="film-cut" aria-hidden="true"></div>
