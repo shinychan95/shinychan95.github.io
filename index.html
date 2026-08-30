@@ -78,6 +78,13 @@
     html { overflow-x: clip; }
   }
   html.locked { overflow: hidden; }
+  /* .film-cut이 뷰포트보다 넓어 넘치는 만큼을 main 안에서 잘라낸다. 루트에 걸면
+     iOS 사파리가 뷰포트 패닝을 따로 처리해 여전히 끌린다. main에서 자르면 문서의
+     가로 오버플로 자체가 사라져 어느 브라우저에서도 끌 것이 없다.
+     세로는 visible이라 필름 컷이 경계 위로 걸치는 연출은 그대로다. */
+  @supports (overflow-x: clip) {
+    main { overflow-x: clip; overflow-y: visible; }
+  }
   body {
     background: var(--lt);
     color: var(--ink);
@@ -148,7 +155,7 @@
   /* ======================= 서장 — 양문(게이트폴드) =======================
      가운데 접힌 청첩장이 양쪽으로 열린다. 두 문은 같은 내용(100vw)을 각각 절반씩
      잘라 보여주므로, 닫혀 있을 때는 하나의 지면처럼 이어져 보인다. */
-  #prologue { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
+  #prologue { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
   #leaf { position: absolute; inset: 0; }
   #leaf::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--paper); }
   .opened #leaf::before { display: none; }
@@ -785,6 +792,7 @@
   footer .made-note i { font-family: var(--display); font-style: italic; letter-spacing: .05em; }
 
   /* 꽃잎 */
+  #petals { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
   .petal {
     position: fixed; z-index: 70; pointer-events: none;
     width: 12px; height: 15px;
@@ -1306,6 +1314,7 @@
   <button class="lb-nav next" id="lbNext" type="button" aria-label="다음 사진">&#8250;</button>
 </div>
 
+<div id="petals" aria-hidden="true"></div>
 <div id="toast" role="status"></div>
 
 <audio id="bgm" loop preload="auto" src="assets/mid-air.m4a"></audio>
@@ -1500,6 +1509,7 @@
     clearTimeout(artTimer); /* 탭하면 수동 모드 */
     art.classList.toggle('real');
   });
+  var petalLayer = document.getElementById('petals');
   document.addEventListener('click', function (e) {
     if (!document.body.classList.contains('opened')) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1513,7 +1523,7 @@
       p.style.setProperty('--r0', (Math.random() * 360) + 'deg');
       p.style.setProperty('--r1', (Math.random() * 720 - 360) + 'deg');
       p.style.setProperty('--dur', (1.1 + Math.random() * 0.9) + 's');
-      document.body.appendChild(p);
+      petalLayer.appendChild(p);
       p.addEventListener('animationend', function () { this.remove(); });
     }
   });
