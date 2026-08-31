@@ -431,7 +431,12 @@
     border-bottom: 1px solid rgba(239, 230, 220, .22);
     box-shadow: 0 22px 44px -22px rgba(0, 0, 0, .8);
   }
-  @supports not (aspect-ratio: 1) { .scene .still { height: 218px; } }
+  /* 세로 사진만 모인 장면(SCENE 03)은 프레임도 세로로 — 잘라낼 곳이 없어진다 */
+  .scene .still.tall { aspect-ratio: 3 / 4; max-width: 330px; }
+  @supports not (aspect-ratio: 1) {
+    .scene .still { height: 218px; }
+    .scene .still.tall { height: 420px; }
+  }
   /* --w: 스크롤 진행도(0=흑백, 1=컬러). JS가 매 프레임 갱신한다 */
   /* 한 프레임 안에서 사진이 천천히 넘어간다 (JS가 .on을 옮긴다) */
   .scene .still img {
@@ -1031,8 +1036,8 @@
   <section id="scene3" class="pg scene">
     <p class="no" data-reveal>SCENE 03</p>
     <h3 data-reveal style="--d:.05s">그리고, 약속</h3>
-    <figure class="still" data-reveal style="--d:.1s">
-        <img src="assets/photos/scene3-1.jpg" style="object-position: center 68%" alt="천 일 기념 케이크와 꽃다발, 목걸이가 놓인 테이블" class="on" loading="lazy" decoding="async">
+    <figure class="still tall" data-reveal style="--d:.1s">
+        <img src="assets/photos/scene3-1.jpg" alt="천 일 기념 케이크와 꽃다발, 목걸이가 놓인 테이블" class="on" loading="lazy" decoding="async">
         <img src="assets/photos/scene3-2.jpg" alt="「나랑 결혼해 줄래?」 가랜드와 풍선, 촛불로 꾸민 프러포즈 자리" loading="lazy" decoding="async">
       <span class="grain" aria-hidden="true"></span>
     </figure>
