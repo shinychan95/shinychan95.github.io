@@ -419,16 +419,11 @@
     color: var(--ink-onblk);
     margin-bottom: 3.4vh;
   }
-  /* 한 장면에 여러 컷 — 세로로 이어 붙인 필름처럼 */
-  .scene .stills {
-    display: grid; gap: 8px;
-    width: 100%; max-width: 440px; margin: 0 auto;
-  }
-  /* 세로 사진 두 장은 나란히 (세로로 쌓으면 화면을 넘어간다) */
-  .scene .stills.side { grid-template-columns: 1fr 1fr; }
   .scene .still {
     position: relative;
-    aspect-ratio: var(--ar, 16 / 10);
+    width: 100%; max-width: 440px;
+    aspect-ratio: 16 / 10;
+    margin: 0 auto;
     overflow: hidden;
     border-radius: 4px;
     /* 레터박스 — 스크린 위아래 얇은 빛 */
@@ -436,15 +431,21 @@
     border-bottom: 1px solid rgba(239, 230, 220, .22);
     box-shadow: 0 22px 44px -22px rgba(0, 0, 0, .8);
   }
-  @supports not (aspect-ratio: 1) { .scene .still { height: 190px; } }
+  @supports not (aspect-ratio: 1) { .scene .still { height: 218px; } }
   /* --w: 스크롤 진행도(0=흑백, 1=컬러). JS가 매 프레임 갱신한다 */
+  /* 한 프레임 안에서 사진이 천천히 넘어간다 (JS가 .on을 옮긴다) */
   .scene .still img {
+    position: absolute; inset: 0;
     width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity 1s ease;
     filter:
       grayscale(calc(1 - var(--w, 0)))
       contrast(calc(1.06 - .06 * var(--w, 0)))
       brightness(calc(.9 + .1 * var(--w, 0)));
   }
+  .scene .still img.on { opacity: 1; }
+  /* 화면 캡처처럼 가로로 매우 길거나 세로로 긴 컷은 잘라내지 않고 레터박스로 */
+  .scene .still img.fit { object-fit: contain; }
   .scene .grain {
     position: absolute; inset: 0; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
@@ -464,21 +465,16 @@
     }
   }
   .scene .cap {
-    display: grid; justify-items: center;
-    margin-top: 3.6vh;
-    max-width: 30ch;
+    margin-top: 3.8vh;
+    max-width: 34ch;
   }
   .scene .cap p {
-    grid-area: 1 / 1;
     font-family: var(--serif-kr);
     font-size: clamp(14px, 3.9vw, 16px);
     line-height: 2.05;
     color: var(--ink-onblk);
+    word-break: keep-all;
   }
-  /* 먼저 쓰인 문장이 다 사라진 뒤에 다음 문장이 떠오른다 — 둘 다 스크롤에 물려 있다 */
-  .scene .cap .c1 { opacity: calc(1 - var(--w1, 0)); }
-  .scene .cap .c2 { opacity: var(--w2, 0); color: #FBF5EE; }
-  .scene .yr { font-family: var(--display); font-style: italic; font-size: 13.5px; letter-spacing: .18em; color: var(--soft-onblk); margin-top: 3vh; }
 
   /* ======================= 갤러리 — 가로 필름 릴 (블러시) ======================= */
   #gallery { background: var(--lt); padding: 100px 0 84px; text-align: center; }
@@ -995,66 +991,56 @@
        c1 = 처음 보이는 문장(흑백), c2 = 다시 봤을 때의 문장(컬러). 스틸을 탭하면 다시 오갈 수 있다. -->
   <section id="scene1" class="pg scene">
     <p class="no" data-reveal>SCENE 01</p>
-    <h3 data-reveal style="--d:.05s">건강검진센터 대기실</h3>
-    <div class="stills" data-reveal style="--d:.1s">
-      <figure class="still" style="--ar: 1000 / 350">
-        <img src="assets/photos/scene1-1.jpg" alt="온라인 신입 교육 화상 화면. 찬영과 유선의 창이 나란히 놓여 있다" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-      <figure class="still" style="--ar: 1000 / 377">
-        <img src="assets/photos/scene1-2.jpg" alt="화상으로 함께 점심을 먹는 동기들. 각자 도시락을 들어 보이고 있다" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-      <figure class="still" style="--ar: 1100 / 466">
-        <img src="assets/photos/scene1-3.jpg" alt="건강검진센터 대기실에서 서로를 알아보는 장면을 그린 그림. 휴대폰에 「혹시 유선씨 맞으신가요?」 메시지가 떠 있다" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-    </div>
+    <h3 data-reveal style="--d:.05s">처음 만난 날</h3>
+    <figure class="still" data-reveal style="--d:.1s">
+        <img src="assets/photos/scene1-1.jpg" alt="온라인 신입 교육 화상 화면. 찬영과 유선의 창이 나란히 놓여 있다" class="on fit" loading="lazy" decoding="async">
+        <img src="assets/photos/scene1-2.jpg" alt="화상으로 함께 점심을 먹는 동기들. 각자 도시락을 들어 보이고 있다" class="fit" loading="lazy" decoding="async">
+        <img src="assets/photos/scene1-3.jpg" alt="건강검진센터 대기실에서 서로를 알아보는 순간을 그린 그림. 휴대폰에 「혹시 유선씨 맞으신가요?」 메시지가 떠 있다" class="fit" loading="lazy" decoding="async">
+        <img src="assets/photos/scene1-4.jpg" alt="책상 위 모니터에 영상통화로 연결된 유선이 무언가를 먹고 있다" loading="lazy" decoding="async">
+        <img src="assets/photos/scene1-5.jpg" alt="영상통화를 켜둔 채 침대에 누워 잠든 모습" loading="lazy" decoding="async">
+      <span class="grain" aria-hidden="true"></span>
+    </figure>
     <div class="cap" data-reveal style="--d:.15s">
-      <p class="c1">같은 해에 입사했지만,<br>서로 화면으로만 봤습니다.</p>
-      <p class="c2">「혹시 유선씨 맞으신가요?」<br>그날 처음 같이 밥을 먹었습니다.</p>
+      <p>같은 해에 입사했지만<br>
+        한참은 화면으로만 봤습니다.<br>
+        먼저 건넨 한 줄이 여기까지 왔습니다.</p>
     </div>
-    <p class="yr" data-reveal style="--d:.2s">2021. 12. 17.</p>
   </section>
+
   <section id="scene2" class="pg scene">
     <p class="no" data-reveal>SCENE 02</p>
-    <h3 data-reveal style="--d:.05s">다시, 화면 너머로</h3>
-    <div class="stills" data-reveal style="--d:.1s">
-      <figure class="still" style="--ar: 1000 / 561">
-        <img src="assets/photos/scene2-1.jpg" alt="책상 위 모니터에 영상통화로 연결된 유선이 무언가를 먹고 있다" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-      <figure class="still" style="--ar: 1000 / 750">
-        <img src="assets/photos/scene2-2.jpg" alt="영상통화를 켜둔 채 침대에 누워 잠든 모습" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-    </div>
+    <h3 data-reveal style="--d:.05s">함께 걸어온 시간</h3>
+    <figure class="still" data-reveal style="--d:.1s">
+        <img src="assets/photos/scene2-1.jpg" alt="네 컷 사진 속에서 장난스럽게 포즈를 취한 두 사람" class="on" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-2.jpg" alt="눈 오는 날 눈사람을 만들고 찍은 사진" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-3.jpg" alt="앞치마를 두르고 마주 앉아 요리하는 두 사람" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-4.jpg" alt="노을 지는 바닷가에서 마주 선 두 사람의 실루엣" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-5.jpg" alt="봄날 강가에서 나란히 선 두 사람" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-6.jpg" style="object-position: center 66%" alt="메타세쿼이아 길에 자전거를 세워두고 선 두 사람" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-7.jpg" alt="텐트 안에서 모닥불을 앞에 두고 앉은 두 사람" loading="lazy" decoding="async">
+        <img src="assets/photos/scene2-8.jpg" alt="정장과 드레스를 입고 꽃을 든 네 컷 사진" class="fit" loading="lazy" decoding="async">
+      <span class="grain" aria-hidden="true"></span>
+    </figure>
     <div class="cap" data-reveal style="--d:.15s">
-      <p class="c1">어렵게 만났더니<br>이번엔 대부분 화상이었습니다.</p>
-      <p class="c2">각자 방에서 같이 밥을 먹고,<br>통화하다 그대로 잠들었습니다.</p>
+      <p>눈이 오면 눈사람을 만들고<br>
+        봄이 오면 자전거를 탔습니다.<br>
+        그렇게 사계절이 여러 번 쌓였습니다.</p>
     </div>
-    <!-- TODO(연도): 화상 데이트 시기 확인 후 교체 -->
-    <p class="yr" data-reveal style="--d:.2s">2021 &ndash; 2022</p>
   </section>
+
   <section id="scene3" class="pg scene">
     <p class="no" data-reveal>SCENE 03</p>
-    <h3 data-reveal style="--d:.05s">결혼하자는 말</h3>
-    <div class="stills side" data-reveal style="--d:.1s">
-      <figure class="still" style="--ar: 3 / 4">
-        <img src="assets/photos/scene3-1.jpg" alt="천 일 기념 케이크와 꽃다발, 목걸이가 놓인 테이블" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-      <figure class="still" style="--ar: 3 / 4">
+    <h3 data-reveal style="--d:.05s">그리고, 약속</h3>
+    <figure class="still" data-reveal style="--d:.1s">
+        <img src="assets/photos/scene3-1.jpg" style="object-position: center 68%" alt="천 일 기념 케이크와 꽃다발, 목걸이가 놓인 테이블" class="on" loading="lazy" decoding="async">
         <img src="assets/photos/scene3-2.jpg" alt="「나랑 결혼해 줄래?」 가랜드와 풍선, 촛불로 꾸민 프러포즈 자리" loading="lazy" decoding="async">
-        <span class="grain" aria-hidden="true"></span>
-      </figure>
-    </div>
+      <span class="grain" aria-hidden="true"></span>
+    </figure>
     <div class="cap" data-reveal style="--d:.15s">
-      <p class="c1">천 일째 되는 날,<br>이제 준비를 시작하자고 했습니다.</p>
-      <p class="c2">그리고 얼마 뒤,<br>풍선 사이에서 다시 물었습니다.</p>
+      <p>천 일째 되는 날 결혼을 준비하자 했고<br>
+        얼마 뒤 촛불 앞에서 다시 물었습니다.<br>
+        답은 그전부터 정해져 있었습니다.</p>
     </div>
-    <!-- TODO(연도): 천 일 · 프러포즈 날짜 확인 후 교체 -->
-    <p class="yr" data-reveal style="--d:.2s">2024 &ndash; 2026</p>
   </section>
 
   <div class="film-cut" aria-hidden="true"></div>
@@ -1599,7 +1585,7 @@
     paintQuote();
   }
 
-  /* ---------- SCENE: 스크롤을 내리는 만큼 흑백이 컬러로, 문장이 다음 문장으로 ----------
+  /* ---------- SCENE: 스크롤을 내리는 만큼 흑백이 컬러로 ----------
      스틸이 화면을 지나가는 동안 0 → 1. 되돌리면 다시 흑백으로 돌아온다. */
   var scenes = [].slice.call(document.querySelectorAll('.scene'));
   if (scenes.length) {
@@ -1617,8 +1603,6 @@
         var top = st.getBoundingClientRect().top;
         var prog = (vh * 0.75 - top) / (vh * 0.62);
         sc.style.setProperty('--w', ramp(prog, .20, .74).toFixed(3));
-        sc.style.setProperty('--w1', ramp(prog, .32, .48).toFixed(3));
-        sc.style.setProperty('--w2', ramp(prog, .50, .66).toFixed(3));
       });
     };
     var onSceneScroll = function () {
@@ -1627,17 +1611,35 @@
       requestAnimationFrame(paintScenes);
     };
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      scenes.forEach(function (sc) {
-        sc.style.setProperty('--w', '1');
-        sc.style.setProperty('--w1', '1');
-        sc.style.setProperty('--w2', '1');
-      });
+      scenes.forEach(function (sc) { sc.style.setProperty('--w', '1'); });
     } else {
       window.addEventListener('scroll', onSceneScroll, { passive: true });
       window.addEventListener('resize', onSceneScroll);
       paintScenes();
     }
   }
+
+  /* ---------- SCENE: 한 프레임 안에서 사진이 천천히 넘어간다 ----------
+     화면에 들어와 있을 때만 돈다. 안 보이는 동안 돌면 다시 왔을 때 엉뚱한 컷에 가 있다. */
+  document.querySelectorAll('.scene .still').forEach(function (still) {
+    var shots = still.querySelectorAll('img');
+    if (shots.length < 2) return;
+    var at = 0, timer = null;
+    var step = function () {
+      shots[at].classList.remove('on');
+      at = (at + 1) % shots.length;
+      shots[at].classList.add('on');
+      var next = shots[(at + 1) % shots.length];
+      if (!next.complete) next.loading = 'eager'; /* 다음 컷을 미리 */
+    };
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting && !timer) timer = setInterval(step, 2600);
+        else if (!en.isIntersecting && timer) { clearInterval(timer); timer = null; }
+      });
+    }, { threshold: 0.35 });
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) io.observe(still);
+  });
 
   /* ---------- 엔드 크레딧 롤 ---------- */
   var footerEl = document.getElementById('footer');
