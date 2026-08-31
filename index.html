@@ -52,10 +52,11 @@
     --blk2: #1E1A15;
     --ink: #26221C;
     --ink-onblk: #EFE6DC;
-    --soft: #75695A;
+    --soft: #665B4C;        /* 카드 위 6.58:1 (AA) */
     --soft-onblk: #B9AB9C;
-    --faint: #B3A896;
-    --rose: #C46A7E;
+    --faint: #75695A;       /* 카드 위 5.31:1 — 예전 #B3A896은 2.33:1로 거의 안 보였다 */
+    --rose: #C46A7E;        /* 하트 핀·꽃잎 등 채우기용 */
+    --rose-ink: #A84359;    /* 밝은 배경 위 글자용 — 카드 5.77:1 (AA). --rose는 3.65:1로 미달 */
     --rose-soft: #E08E9F;
     --line: rgba(38, 34, 28, .12);
     --line-onblk: rgba(239, 230, 220, .16);
@@ -89,7 +90,8 @@
     background: var(--lt);
     color: var(--ink);
     font-family: var(--sans);
-    font-weight: 300;
+    /* 어르신 가독성 — Light(300)는 작은 글씨에서 획이 끊겨 보인다 */
+    font-weight: 400;
     line-height: 1.8;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
@@ -113,10 +115,10 @@
   .label { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 26px; }
   .label .laurel { width: 54px; height: auto; opacity: .85; }
   .label .t {
-    font-family: var(--display); font-weight: 500;
-    font-size: 17px; letter-spacing: .42em; text-indent: .42em;
+    font-family: var(--display); font-weight: 600;
+    font-size: 18px; letter-spacing: .42em; text-indent: .42em;
   }
-  .label .s { font-family: var(--sans); font-weight: 300; font-size: 12px; letter-spacing: .12em; color: var(--faint); }
+  .label .s { font-family: var(--sans); font-weight: 400; font-size: 12px; letter-spacing: .12em; color: var(--faint); }
   .on-blk .label .s { color: var(--soft-onblk); }
 
   /* ---------- 필름 스트립 경계 ----------
@@ -398,7 +400,7 @@
   .cast-item .role {
     font-family: var(--display); font-weight: 500;
     font-size: 11.5px; letter-spacing: .38em; text-indent: .38em;
-    color: var(--rose); margin-bottom: 8px;
+    color: var(--rose-ink); margin-bottom: 8px;
   }
   .cast-item .nm { font-family: var(--serif-kr); font-weight: 700; font-size: 21px; letter-spacing: .18em; text-indent: .18em; }
   .cast-item .of { font-size: 13px; color: var(--soft); margin-top: 6px; letter-spacing: .06em; }
@@ -515,7 +517,7 @@
     width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
     background: #26221C;
   }
-  .reel-hint { font-family: var(--sans); font-weight: 300; font-size: 11.5px; letter-spacing: .14em; color: var(--faint); margin-top: 6px; }
+  .reel-hint { font-family: var(--sans); font-weight: 400; font-size: 11.5px; letter-spacing: .14em; color: var(--faint); margin-top: 6px; }
   .g-actions { display: flex; justify-content: center; gap: 12px; margin-top: 26px; }
   .txt-btn {
     font-size: 13px; font-weight: 400;
@@ -551,7 +553,7 @@
   }
   .blog-card .bk {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    font-family: var(--display); font-weight: 500; font-size: 11px; letter-spacing: .34em; color: var(--rose);
+    font-family: var(--display); font-weight: 500; font-size: 11px; letter-spacing: .34em; color: var(--rose-ink);
   }
   .blog-card .bk svg { width: 15px; height: 15px; flex: none; opacity: .75; }
   .blog-card .bt { font-family: var(--serif-kr); font-weight: 700; font-size: 17px; margin-top: 10px; line-height: 1.6; }
@@ -563,7 +565,7 @@
     font-size: 12.5px; letter-spacing: .02em;
   }
   .blog-card .bhost { font-family: var(--mono); font-size: 11px; color: var(--faint); }
-  .blog-card .bcta { color: var(--rose); font-weight: 400; }
+  .blog-card .bcta { color: var(--rose-ink); font-weight: 400; }
   .blog-card.ready .bcta::after { content: " →"; }
   .blog-card:active { transform: scale(.985); }
 
@@ -610,7 +612,7 @@
   .ticket .tk-row { display: flex; gap: 16px; align-items: baseline; padding: 4px 0; }
   .ticket .tk-row .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; color: var(--faint); width: 44px; flex: none; }
   .ticket .tk-row .v { font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: .06em; }
-  .ticket .tk-row .v small { font-family: var(--sans); font-weight: 300; font-size: 13px; color: var(--soft); margin-left: 6px; }
+  .ticket .tk-row .v small { font-family: var(--sans); font-weight: 400; font-size: 13px; color: var(--soft); margin-left: 6px; }
   .ticket .body { padding: 26px 30px 30px; position: relative; }
 
   .cal { max-width: 300px; margin: 0 auto; text-align: center; }
@@ -628,7 +630,7 @@
     z-index: -1;
   }
   .dday { text-align: center; margin-top: 16px; font-size: 13px; color: var(--soft); }
-  .dday b { font-family: var(--display); font-size: 18px; color: var(--rose); font-weight: 600; letter-spacing: .06em; }
+  .dday b { font-family: var(--display); font-size: 18px; color: var(--rose-ink); font-weight: 600; letter-spacing: .06em; }
 
   .maps { display: flex; gap: 8px; margin-top: 16px; }
   .maps a {
@@ -639,9 +641,9 @@
     padding: 13px 0;
     transition: background .25s, color .25s;
   }
-  .maps a:active { background: rgba(196, 106, 126, .12); color: var(--rose); }
+  .maps a:active { background: rgba(196, 106, 126, .12); color: var(--rose-ink); }
   .copy-btn {
-    font-size: 11.5px; color: var(--rose);
+    font-size: 11.5px; color: var(--rose-ink);
     border: 1px solid rgba(196, 106, 126, .35);
     border-color: color-mix(in srgb, var(--rose) 35%, transparent);
     border-radius: 999px; padding: 3px 10px;
@@ -700,7 +702,7 @@
   }
   .w-ico svg { width: 15px; height: 15px; }
   .w-body { min-width: 0; }
-  .w-k { font-size: 10.5px; letter-spacing: .24em; color: var(--faint); }
+  .w-k { font-size: 11px; letter-spacing: .2em; color: var(--faint); }
   .w-v { font-size: 14px; color: var(--ink); line-height: 1.7; margin-top: 5px; word-break: keep-all; }
   .w-s { font-size: 12px; color: var(--soft); line-height: 1.8; margin-top: 5px; word-break: keep-all; }
   /* 주차장은 종이 청첩장처럼 이름과 주소를 나란히 */
@@ -737,7 +739,7 @@
   .loc-map .walk { fill: none; stroke: var(--rose); stroke-width: 1.6; stroke-dasharray: 4 5; stroke-linecap: round; }
   .loc-map text { font-family: var(--sans); font-weight: 400; font-size: 9.5px; fill: var(--soft); paint-order: stroke; stroke: #FBF8F3; stroke-width: 3px; stroke-linejoin: round; }
   .loc-map .venue-nm { font-family: var(--serif-kr); font-weight: 700; font-size: 13px; fill: var(--ink); }
-  .loc-map .accent { fill: var(--rose); font-weight: 500; }
+  .loc-map .accent { fill: var(--rose-ink); font-weight: 500; }
   .loc-map .onpin { fill: #fff; stroke: none; font-size: 10px; }
 
   /* ======================= 계좌 (WITH LOVE) ======================= */
