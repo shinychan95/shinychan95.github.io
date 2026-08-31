@@ -702,7 +702,13 @@
   .w-body { min-width: 0; }
   .w-k { font-size: 10.5px; letter-spacing: .24em; color: var(--faint); }
   .w-v { font-size: 14px; color: var(--ink); line-height: 1.7; margin-top: 5px; word-break: keep-all; }
-  .w-s { font-size: 12.5px; color: var(--soft); line-height: 1.8; margin-top: 5px; word-break: keep-all; }
+  .w-s { font-size: 12px; color: var(--soft); line-height: 1.8; margin-top: 5px; word-break: keep-all; }
+  /* 주차장은 종이 청첩장처럼 이름과 주소를 나란히 */
+  .park { margin-top: 7px; display: grid; gap: 5px; }
+  .park div { display: flex; gap: 10px; align-items: baseline; }
+  .park dt, .park .pk { flex: none; width: 4.8em; font-size: 12.5px; color: var(--ink); }
+  .park dd, .park .pv { margin: 0; font-size: 12.5px; color: var(--soft); word-break: keep-all; }
+  .park .pv b { font-weight: 400; color: var(--soft); }
 
   .loc-map {
     margin: 20px 0 4px;
@@ -1156,7 +1162,7 @@
 
       <!-- 약도: 수도빌딩(제2주차장)은 봉은사역 사거리 남동쪽 모서리, 봉은사로에 바로 붙어 있다.
            역 이름표가 그 자리를 차지하지 않도록 사거리 남서쪽으로 뺐다. -->
-      <figure class="loc-map" aria-label="약도 — 9호선 봉은사역 4번 출구에서 봉은사로를 따라 동쪽으로 도보 3분">
+      <figure class="loc-map" aria-label="약도 — 9호선 봉은사역 4번 출구에서 봉은사로를 따라 동쪽으로 도보 5분">
         <svg viewBox="0 0 320 184" role="img">
           <!-- 도로 -->
           <rect class="road" x="0" y="100" width="320" height="22"/>
@@ -1176,7 +1182,7 @@
           <circle cx="88" cy="94" r="3.4" fill="var(--rose)"/>
           <text class="accent" x="96" y="86" text-anchor="start">4번 출구</text>
           <path class="walk" d="M94 92 C 140 89, 190 82, 232 72"/>
-          <text class="accent" x="172" y="74" text-anchor="middle">도보 3분</text>
+          <text class="accent" x="172" y="74" text-anchor="middle">도보 5분</text>
           <!-- 예식장 -->
           <text class="venue-nm" x="248" y="28" text-anchor="middle">노블발렌티 삼성</text>
           <g transform="translate(248 56)">
@@ -1206,8 +1212,22 @@
           </span>
           <div class="w-body">
             <p class="w-k">지하철</p>
-            <p class="w-v">9호선 봉은사역 4번 출구에서 도보 3분</p>
-            <p class="w-s">2호선 삼성역 7번 출구에서<br>버스 3417 &middot; 강남01</p>
+            <p class="w-v">9호선 봉은사역 4번 출구 도보 5분</p>
+            <p class="w-s">2호선 삼성역 7번 출구, 버스 3417 &middot; 강남01</p>
+          </div>
+        </li>
+        <li>
+          <span class="w-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8.5a2 2 0 0 1 2-2h11l4 4v5.5a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 16z"/>
+              <path d="M3 11.5h17M13 6.5v5"/>
+              <circle cx="7" cy="19" r="1.9"/><circle cx="16.5" cy="19" r="1.9"/>
+            </svg>
+          </span>
+          <div class="w-body">
+            <p class="w-k">셔틀버스</p>
+            <p class="w-v">봉은사역 5번 출구에서 운행합니다</p>
+            <!-- TODO(셔틀): 운행 시간·간격 확인 후 아래 한 줄 추가 -->
           </div>
         </li>
         <li>
@@ -1219,8 +1239,12 @@
           </span>
           <div class="w-body">
             <p class="w-k">주차</p>
-            <p class="w-v">제2주차장(수도빌딩)을 이용해 주세요</p>
-            <p class="w-s">봉은사로 610 &middot; 봉은사역 바로 옆<br>예식장까지 도보 3분<br>본관 주차장은 협소합니다</p>
+            <!-- TODO(주차): 본관·제2주차장 주소가 서로 맞는지 확인 -->
+            <dl class="park">
+              <div><dt>본관</dt><dd>봉은사로 637</dd></div>
+              <div><dt>제2주차장</dt><dd>봉은사로 610 &middot; 수도빌딩</dd></div>
+            </dl>
+            <p class="w-s">본관 주차장이 협소하오니<br>되도록 제2주차장을 이용해 주세요</p>
           </div>
         </li>
       </ul>
