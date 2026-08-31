@@ -710,6 +710,20 @@
   .park dd, .park .pv { margin: 0; font-size: 12.5px; color: var(--soft); word-break: keep-all; }
   .park .pv b { font-weight: 400; color: var(--soft); }
 
+  /* 카드 맨 아래, 꼭 읽고 가셨으면 하는 한 줄 */
+  .notice {
+    margin-top: 24px;
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(196, 106, 126, .16);
+    border: 1px solid color-mix(in srgb, var(--rose) 16%, transparent);
+    background: rgba(196, 106, 126, .045);
+    background: color-mix(in srgb, var(--rose) 4.5%, transparent);
+    font-size: 12.5px; line-height: 1.7;
+    color: var(--ink);
+    text-align: center; word-break: keep-all;
+  }
+
   .loc-map {
     margin: 20px 0 4px;
     border: 1px solid var(--line);
@@ -1239,15 +1253,16 @@
           </span>
           <div class="w-body">
             <p class="w-k">주차</p>
-            <!-- TODO(주차): 본관·제2주차장 주소가 서로 맞는지 확인 -->
             <dl class="park">
               <div><dt>본관</dt><dd>봉은사로 637</dd></div>
               <div><dt>제2주차장</dt><dd>봉은사로 610 &middot; 수도빌딩</dd></div>
             </dl>
-            <p class="w-s">본관 주차장이 협소하오니<br>되도록 제2주차장을 이용해 주세요</p>
           </div>
         </li>
       </ul>
+
+      <!-- 꼭 읽고 가셨으면 하는 한 줄 -->
+      <p class="notice" data-reveal>본관은 협소하니 제2주차장을 이용해 주세요</p>
     </div>
   </section>
 
