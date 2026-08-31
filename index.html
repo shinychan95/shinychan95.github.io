@@ -1002,14 +1002,14 @@
     <figure class="still" data-reveal style="--d:.1s">
         <img src="assets/photos/scene1-1.jpg" alt="온라인 신입 교육 화상 화면. 찬영과 유선의 창이 나란히 놓여 있다" class="on fit" loading="lazy" decoding="async">
         <img src="assets/photos/scene1-2.jpg" alt="화상으로 함께 점심을 먹는 동기들. 각자 도시락을 들어 보이고 있다" class="fit" loading="lazy" decoding="async">
-        <img src="assets/photos/scene1-3.jpg" alt="건강검진센터 대기실에서 서로를 알아보는 순간을 그린 그림. 휴대폰에 「혹시 유선씨 맞으신가요?」 메시지가 떠 있다" class="fit" loading="lazy" decoding="async">
+        <img src="assets/photos/scene1-3.jpg" alt="건강검진센터 대기실에서 서로를 알아보는 순간을 그린 그림. 휴대폰에 「혹시 유선씨 맞으신가요?」 메시지가 떠 있다" class="fit" data-hold="5600" loading="lazy" decoding="async">
         <img src="assets/photos/scene1-4.jpg" alt="책상 위 모니터에 영상통화로 연결된 유선이 무언가를 먹고 있다" loading="lazy" decoding="async">
         <img src="assets/photos/scene1-5.jpg" alt="영상통화를 켜둔 채 침대에 누워 잠든 모습" loading="lazy" decoding="async">
       <span class="grain" aria-hidden="true"></span>
     </figure>
     <div class="cap" data-reveal style="--d:.15s">
-      <p>코로나로 신입 교육을 화상으로만 받아서<br>
-        얼굴은 건강검진센터에서 처음 봤습니다.<br>
+      <p>같은 해에 입사했지만<br>
+        한참은 화면으로만 봤습니다.<br>
         먼저 건넨 한 줄이 여기까지 왔습니다.</p>
     </div>
   </section>
@@ -1632,17 +1632,20 @@
     var shots = still.querySelectorAll('img');
     if (shots.length < 2) return;
     var at = 0, timer = null;
+    /* 읽을 게 있는 컷은 data-hold로 더 오래 머문다 */
+    var hold = function (i) { return +shots[i].getAttribute('data-hold') || 2600; };
     var step = function () {
       shots[at].classList.remove('on');
       at = (at + 1) % shots.length;
       shots[at].classList.add('on');
-      var next = shots[(at + 1) % shots.length];
-      if (!next.complete) next.loading = 'eager'; /* 다음 컷을 미리 */
+      var after = shots[(at + 1) % shots.length];
+      if (!after.complete) after.loading = 'eager'; /* 다음 컷을 미리 */
+      timer = setTimeout(step, hold(at));
     };
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting && !timer) timer = setInterval(step, 2600);
-        else if (!en.isIntersecting && timer) { clearInterval(timer); timer = null; }
+        if (en.isIntersecting && !timer) timer = setTimeout(step, hold(at));
+        else if (!en.isIntersecting && timer) { clearTimeout(timer); timer = null; }
       });
     }, { threshold: 0.35 });
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) io.observe(still);
