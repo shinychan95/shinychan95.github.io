@@ -301,13 +301,13 @@
     width: auto;
     transform: translate(-50%, -50%) scale(var(--ilsc, 1));
     filter: drop-shadow(0 16px 22px rgba(59,47,30,.15));
-    transition: opacity .85s ease, transform .85s ease, filter .85s ease;
+    transition: opacity 2s ease-in-out, transform 2s ease-in-out, filter 2s ease-in-out;
   }
   .art .photo {
     position: absolute; inset: 0; margin: 0;
     overflow: hidden;
     opacity: 0; pointer-events: none;
-    transition: opacity .9s ease;
+    transition: opacity 2s ease-in-out;
   }
   .art .photo img {
     width: 100%; height: 100%; object-fit: cover;
@@ -322,30 +322,33 @@
   .art.real .illust { --ilsc: .97; opacity: 0; filter: blur(2px); }
   .art.real .photo { opacity: 1; }
   /* 사진 위에서는 텍스트가 크림색으로 */
-  .art .ct * { transition: color .9s ease, text-shadow .9s ease; }
-  .art.real .script, .art.real .names { color: #F8F3EC; text-shadow: 0 2px 20px rgba(15, 10, 5, .45); }
-  .art.real .names-en { color: rgba(248, 243, 236, .8); }
+  .art .ct * { transition: color 1.6s ease-in-out, text-shadow 1.6s ease-in-out; }
+  .art.real .script, .art.real .wdate { color: #F8F3EC; text-shadow: 0 2px 20px rgba(15, 10, 5, .45); }
+  .art.real .wplace { color: rgba(248, 243, 236, .82); }
   .art.real ~ .cue { background: rgba(248,243,236,.8); }
   .ct { position: absolute; left: 0; right: 0; z-index: 2; text-align: center; pointer-events: none; }
   .ct.top { top: calc(56px + env(safe-area-inset-top)); }
-  .ct.btm { bottom: 13vh; bottom: 13svh; opacity: 0; transition: opacity 1s ease .4s; }
+  /* 예식 정보는 사진이 떠오른 뒤에 — 일러스트 위에선 글자가 옷·다리와 겹쳐 안 읽힌다 */
+  .ct.btm { bottom: 13vh; bottom: 13svh; opacity: 0; transition: opacity 1.6s ease .9s; }
   .art.real .ct.btm { opacity: 1; }
-  .names {
+  /* 한 줄로 떨어지게 자간을 좁게 잡았다 */
+  .wdate {
     font-family: var(--serif-kr); font-weight: 700;
-    font-size: clamp(21px, 5.6vw, 27px);
-    letter-spacing: .34em; text-indent: .34em;
+    font-size: clamp(17px, 4.6vw, 21px);
+    letter-spacing: .04em; white-space: nowrap;
     color: var(--ink);
   }
-  .names-en {
+  .wplace {
     font-family: var(--sans); font-weight: 400;
-    font-size: 10.5px; letter-spacing: .44em; text-indent: .44em;
-    color: var(--faint); margin-top: 10px;
+    font-size: 11.5px; letter-spacing: .3em; text-indent: .3em;
+    white-space: nowrap;
+    color: var(--faint); margin-top: 11px;
   }
   .cue {
     position: absolute; bottom: 8vh; bottom: 8svh; left: 50%;
     width: 1px; height: 30px; background: var(--faint);
     animation: drip 2.2s ease-in-out infinite;
-    z-index: 2; transition: background .9s ease;
+    z-index: 2; transition: background 1.6s ease-in-out;
   }
   .art.real .cue { background: rgba(248,243,236,.85); }
 
@@ -927,8 +930,8 @@
         <p class="script">We are getting married</p>
       </div>
       <div class="ct btm">
-        <h1 class="names">찬영 · 유선</h1>
-        <p class="names-en">CHANYOUNG &amp; YOOSUN</p>
+        <h1 class="wdate">2026. 11. 01. 일요일 오전 11시</h1>
+        <p class="wplace">노블발렌티 삼성</p>
       </div>
       <span class="cue" aria-hidden="true"></span>
     </div>
