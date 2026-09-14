@@ -451,7 +451,9 @@
   .scene .shot { flex: 0 0 100%; scroll-snap-align: center; }
   .scene .shot .fr {
     position: relative;
-    aspect-ratio: 16 / 10;
+    /* 3:2 — 16:10보다 아주 조금 높다. 세로로 찍힌 컷에서 잘려 나가는 폭을 줄이려고
+       한 칸만 내린 값이다. 더 내리면 필름 스틸의 가로 느낌이 사라진다 */
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     border-radius: 4px;
     /* 레터박스 — 스크린 위아래 얇은 빛 */
@@ -461,7 +463,7 @@
   }
   .scene .still.tall .shot .fr { aspect-ratio: 3 / 4; }
   @supports not (aspect-ratio: 1) {
-    .scene .shot .fr { height: 218px; }
+    .scene .shot .fr { height: 233px; }
     .scene .still.tall .shot .fr { height: 420px; }
   }
   /* --w: 스크롤 진행도(0=흑백, 1=컬러). JS가 매 프레임 갱신한다 */
@@ -1129,7 +1131,7 @@
       </div>
       <div class="shot">
         <div class="fr">
-          <img src="assets/photos/scene2-6.jpg" style="object-position: center 66%" alt="메타세쿼이아 길에 자전거를 세워두고 선 두 사람" loading="lazy" decoding="async">
+          <img src="assets/photos/scene2-6.jpg" style="object-position: center 90%" alt="메타세쿼이아 길에 자전거를 세워두고 선 두 사람" loading="lazy" decoding="async">
           <span class="grain" aria-hidden="true"></span>
         </div>
       </div>
