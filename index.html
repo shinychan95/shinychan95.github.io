@@ -489,7 +489,9 @@
   /* 컷마다 붙는 짧은 설명 — 문장이 아니라 이게 어떤 사진인지 알려 주는 한 마디 */
   .scene .shot-cap {
     margin: 13px auto 0;
-    max-width: 30ch;
+    /* ch는 글자 크기에 비례한다 — 그냥 두면 글자를 줄여도 폭이 똑같이 줄어
+       줄바꿈이 영영 안 풀린다. --fit으로 나눠 폭은 제자리에 두고 글자만 줄인다. */
+    max-width: calc(30ch / var(--fit));
     /* 한 줄 높이를 미리 잡아 둔다. 컷마다 높이가 달라지면 프레임이 덜컹거린다 */
     min-height: 2.6em;
     padding: 0 10px;
@@ -513,8 +515,9 @@
   .scene .cap {
     margin-top: calc(var(--vph) * .038);
     /* 줄은 <br>로 직접 끊는다. 폰트가 대체 서체로 떨어져도 한 줄이
-       접히지 않도록 여유를 둔 폭이다 */
-    max-width: 38ch;
+       접히지 않도록 여유를 둔 폭이다. ch는 글자 크기에 비례하므로 --fit으로
+       나눠, 글자가 줄어도 폭은 제자리에 있게 한다 */
+    max-width: calc(38ch / var(--fit));
   }
   .scene .cap p {
     font-family: var(--serif-kr);
