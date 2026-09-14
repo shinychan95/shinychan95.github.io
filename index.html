@@ -66,6 +66,14 @@
     --sans: "Noto Sans KR", -apple-system, sans-serif;
     --script: "Great Vibes", cursive;
     --mono: "IBM Plex Mono", ui-monospace, monospace;
+    /* 뷰포트 높이. 인앱 브라우저(카카오톡 등)는 스크롤에 따라 툴바를 접었다 펴면서
+       창 자체를 리사이즈한다 — vh는 물론 svh·dvh까지 전부 흔들린다.
+       그래서 높이에 기대는 값은 전부 이 변수로 받고, JS가 '펼치기' 순간의
+       실측값(px)으로 고정한다. 아래는 JS 이전 첫 페인트용 기본값. */
+    --vph: 100vh;
+  }
+  @supports (height: 100svh) {
+    :root { --vph: 100svh; }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   /* scroll-snap은 사용하지 않는다 — 모바일 크롬 앵커 점프·재스냅 버그 회피, 자유 스크롤 확정 */
@@ -102,8 +110,7 @@
   a { color: inherit; text-decoration: none; }
 
   .pg {
-    min-height: 100vh;
-    min-height: 100svh;
+    min-height: var(--vph);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center;
@@ -264,7 +271,7 @@
   /* ======================= 대문 ======================= */
   #cover {
     background: var(--lt);
-    min-height: 100dvh;
+    min-height: var(--vph);
     padding: 0;
     overflow: hidden;
   }
@@ -297,7 +304,7 @@
   .art .stage { position: absolute; inset: 0; }
   .art .illust {
     position: absolute; left: 50%; top: 50%;
-    height: 100vh; /* JS가 사진 속 인물 크기에 맞춰 재계산 */
+    height: var(--vph); /* JS가 사진 속 인물 크기에 맞춰 재계산 */
     width: auto;
     transform: translate(-50%, -50%) scale(var(--ilsc, 1));
     filter: drop-shadow(0 16px 22px rgba(59,47,30,.15));
@@ -329,7 +336,7 @@
   .ct { position: absolute; left: 0; right: 0; z-index: 2; text-align: center; pointer-events: none; }
   .ct.top { top: calc(56px + env(safe-area-inset-top)); }
   /* 예식 정보는 사진이 떠오른 뒤에 — 일러스트 위에선 글자가 옷·다리와 겹쳐 안 읽힌다 */
-  .ct.btm { bottom: 13vh; bottom: 13svh; opacity: 0; transition: opacity 1.6s ease .9s; }
+  .ct.btm { bottom: calc(var(--vph) * .13); opacity: 0; transition: opacity 1.6s ease .9s; }
   .art.real .ct.btm { opacity: 1; }
   /* 한 줄로 떨어지게 자간을 좁게 잡았다 */
   .wdate {
@@ -345,7 +352,7 @@
     color: var(--faint); margin-top: 11px;
   }
   .cue {
-    position: absolute; bottom: 8vh; bottom: 8svh; left: 50%;
+    position: absolute; bottom: calc(var(--vph) * .08); left: 50%;
     width: 1px; height: 30px; background: var(--faint);
     animation: drip 2.2s ease-in-out infinite;
     z-index: 2; transition: background 1.6s ease-in-out;
@@ -370,8 +377,8 @@
     word-break: keep-all;
     transition-duration: 1.5s;
   }
-  #quote .q + .q { margin-top: .5vh; }
-  #quote .q.gap { margin-top: 1.5vh; }
+  #quote .q + .q { margin-top: calc(var(--vph) * .005); }
+  #quote .q.gap { margin-top: calc(var(--vph) * .015); }
   /* 시간이 아니라 스크롤에 따라 한 줄씩 — 빠르게 넘겨도 놓치지 않는다 */
   #quote .q, #quote .from {
     opacity: 0; transform: translateY(9px);
@@ -386,8 +393,8 @@
 
   /* ======================= 인사 (블랙) ======================= */
   #greet { padding-bottom: 110px; }
-  #greet .msg { display: grid; gap: 2px; margin-top: 1.5vh; }
-  #greet .msg + .msg { margin-top: 3vh; }
+  #greet .msg { display: grid; gap: 2px; margin-top: calc(var(--vph) * .015); }
+  #greet .msg + .msg { margin-top: calc(var(--vph) * .03); }
   #greet .msg span {
     display: block; white-space: nowrap;
     font-size: clamp(12.5px, 3.5vw, 15px);
@@ -399,7 +406,7 @@
 
   /* ======================= CAST (블러시) ======================= */
   #cast { background: var(--lt); }
-  .cast-list { display: grid; gap: 4.5vh; margin-top: 1vh; }
+  .cast-list { display: grid; gap: calc(var(--vph) * .045); margin-top: calc(var(--vph) * .01); }
   .cast-item .role {
     font-family: var(--display); font-weight: 500;
     font-size: 11.5px; letter-spacing: .38em; text-indent: .38em;
@@ -415,14 +422,14 @@
     font-family: var(--display); font-weight: 500;
     font-size: 12px; letter-spacing: .44em; text-indent: .44em;
     color: var(--rose-soft);
-    margin-bottom: 2.6vh;
+    margin-bottom: calc(var(--vph) * .026);
   }
   .scene h3 {
     font-family: var(--serif-kr); font-weight: 700;
     font-size: clamp(21px, 5.8vw, 26px);
     letter-spacing: .12em; text-indent: .12em;
     color: var(--ink-onblk);
-    margin-bottom: 3.4vh;
+    margin-bottom: calc(var(--vph) * .034);
   }
   /* 컷은 가로로 늘어선다 — 자동으로 넘어가되 손으로도 넘길 수 있다 */
   .scene .still {
@@ -499,7 +506,7 @@
   }
   .scene .dots i.on { background: var(--rose-soft); transform: scale(1.3); }
   .scene .cap {
-    margin-top: 3.8vh;
+    margin-top: calc(var(--vph) * .038);
     /* 줄은 <br>로 직접 끊는다. 폰트가 대체 서체로 떨어져도 한 줄이
        접히지 않도록 여유를 둔 폭이다 */
     max-width: 38ch;
@@ -688,7 +695,7 @@
   summary::after { content: "+"; color: var(--faint); font-size: 16px; transition: transform .3s; }
   details[open] summary::after { transform: rotate(45deg); }
 
-  .share-row { display: flex; justify-content: center; gap: 12px; margin-top: 6vh; }
+  .share-row { display: flex; justify-content: center; gap: 12px; margin-top: calc(var(--vph) * .06); }
   /* 검은 배경 위의 공유 버튼 */
   footer .txt-btn {
     color: var(--soft-onblk);
@@ -811,7 +818,7 @@
   .credits {
     position: relative;
     height: 340px;
-    margin: 7vh auto 0;
+    margin: calc(var(--vph) * .07) auto 0;
     max-width: 420px;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
@@ -833,7 +840,7 @@
     color: var(--ink-onblk);
     line-height: 1.3;
   }
-  footer .thanks { font-family: var(--serif-kr); font-size: clamp(14px, 3.9vw, 16px); letter-spacing: .04em; color: var(--soft-onblk); margin-top: 4.5vh; }
+  footer .thanks { font-family: var(--serif-kr); font-size: clamp(14px, 3.9vw, 16px); letter-spacing: .04em; color: var(--soft-onblk); margin-top: calc(var(--vph) * .045); }
   footer .sig {
     font-family: var(--display); font-style: italic; font-weight: 500;
     font-size: 15px; letter-spacing: .14em;
@@ -1628,6 +1635,8 @@
     var h = window.visualViewport ? Math.min(window.innerHeight, window.visualViewport.height) : window.innerHeight;
     h = Math.round(h);
     var w = window.innerWidth;
+    /* 화면 높이에 기대는 모든 값의 단일 출처 — 툴바가 접혀도 흔들리지 않는다 */
+    document.documentElement.style.setProperty('--vph', h + 'px');
     coverEl.style.minHeight = h + 'px';
     coverEl.style.height = h + 'px';
     coverW = w;
