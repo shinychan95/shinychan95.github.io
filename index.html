@@ -1497,12 +1497,6 @@
 <audio id="bgm" loop preload="auto" src="assets/mid-air.m4a"></audio>
 
 <script>
-/* 진단용 — ?debug 로 열었을 때만 쓰인다. 스크립트가 중간에 죽어도 남도록 맨 앞에 둔다 */
-window.__errs = [];
-window.addEventListener('error', function (e) {
-  window.__errs.push((e.message || 'error') + ' @' + (e.lineno || '?'));
-});
-
 (function () {
   'use strict';
   var root = document.documentElement;
@@ -2090,43 +2084,6 @@ window.addEventListener('error', function (e) {
     shareBtn.style.display = 'none';
   }
 })();
-</script>
-
-<!-- ?debug 로 열면 이 기기에서 실제로 잰 값을 보여 준다. 평소에는 아무것도 하지 않는다.
-     원인을 찾고 나면 지울 임시 코드. -->
-<script>
-if (location.search.indexOf('debug') >= 0) window.addEventListener('load', function () {
-  setTimeout(function () {
-    function px(el, prop) { return el ? getComputedStyle(el)[prop] : '-'; }
-    var capP = document.querySelector('#scene1 .cap p');
-    var line = capP && capP.firstChild;
-    var need = '-', avail = '-', lines = '-';
-    if (line) {
-      var r = document.createRange();
-      r.selectNodeContents(line);
-      var rects = [].slice.call(r.getClientRects()).filter(function (x) { return x.width > .5; });
-      var tops = {}, w = 0;
-      rects.forEach(function (x) { tops[Math.round(x.top)] = 1; w += x.width; });
-      need = Math.round(w); lines = Object.keys(tops).length;
-      avail = Math.round(capP.parentElement.getBoundingClientRect().width);
-    }
-    var rows = [
-      ['빌드', '2026-09-14 fit'],
-      ['화면', innerWidth + ' x ' + innerHeight + ' @' + (window.devicePixelRatio || 1)],
-      ['--fit', getComputedStyle(document.documentElement).getPropertyValue('--fit').trim() || '(없음)'],
-      ['SCENE 글자', px(capP, 'fontSize')],
-      ['첫 줄', need + 'px / 폭 ' + avail + 'px / ' + lines + '줄'],
-      ['text-size-adjust', px(document.body, 'webkitTextSizeAdjust') || '-'],
-      ['body 인라인', (document.body.getAttribute('style') || '(없음)').slice(0, 60)],
-      ['에러', window.__errs.length ? window.__errs.join(' | ').slice(0, 120) : '없음']
-    ];
-    var box = document.createElement('div');
-    box.setAttribute('style', 'position:fixed;left:0;right:0;top:0;z-index:9999;background:#000;color:#0f0;' +
-      'font:12px/1.5 ui-monospace,monospace;padding:10px 12px;white-space:pre-wrap;word-break:break-all');
-    box.textContent = rows.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n');
-    document.body.appendChild(box);
-  }, 1200);
-});
 </script>
 </body>
 </html>
