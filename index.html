@@ -809,14 +809,7 @@
   }
   .acct-box .num { font-family: var(--mono); font-size: calc(12.5px * var(--fit)); letter-spacing: .03em; color: var(--ink); white-space: nowrap; }
   .acct-box .bank { font-family: var(--sans, inherit); font-size: calc(11.5px * var(--fit)); letter-spacing: .02em; color: var(--soft); margin-right: 9px; }
-  .acct-box .ico {
-    flex: none; width: 30px; height: 30px; margin: -6px -6px -6px 0;
-    display: grid; place-items: center;
-    color: var(--soft); border-radius: 9px;
-    transition: color .2s, background .2s;
-  }
-  .acct-box .ico svg { width: 15px; height: 15px; }
-  .acct-box .ico:active { color: var(--rose); background: rgba(196, 106, 126, .1); background: color-mix(in srgb, var(--rose) 10%, transparent); }
+  .acct-box .copy-btn { flex: none; margin: -3px 0; }
   /* 안내 문단 (GUIDE) */
   .note { text-align: left; padding: 4px 2px 16px; font-size: calc(13.5px * var(--fit)); line-height: 1.95; color: var(--soft); word-break: keep-all; }
   .note b { display: block; font-weight: 400; color: var(--ink); }
@@ -1440,21 +1433,21 @@
           <div class="who-line"><span class="who-role">아버지</span><b class="who-nm">김대열</b></div>
           <div class="acct-box">
             <span class="num"><span class="bank">농협</span>130030-52-037471</span>
-            <button class="ico" type="button" aria-label="계좌번호 복사" data-copy="농협 130030-52-037471"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H4.5A1.5 1.5 0 0 1 3 13.5V4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V6"/></svg></button>
+            <button class="copy-btn" type="button" data-copy="농협 130030-52-037471">복사</button>
           </div>
         </div>
         <div class="acct2">
           <div class="who-line"><span class="who-role">어머니</span><b class="who-nm">채은희</b></div>
           <div class="acct-box">
             <span class="num"><span class="bank">국민</span>720501-01-046555</span>
-            <button class="ico" type="button" aria-label="계좌번호 복사" data-copy="국민 720501-01-046555"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H4.5A1.5 1.5 0 0 1 3 13.5V4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V6"/></svg></button>
+            <button class="copy-btn" type="button" data-copy="국민 720501-01-046555">복사</button>
           </div>
         </div>
         <div class="acct2">
           <div class="who-line"><span class="who-role">신랑</span><b class="who-nm">김찬영</b></div>
           <div class="acct-box">
             <span class="num"><span class="bank">국민</span>640402-04-158411</span>
-            <button class="ico" type="button" aria-label="계좌번호 복사" data-copy="국민 640402-04-158411"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H4.5A1.5 1.5 0 0 1 3 13.5V4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V6"/></svg></button>
+            <button class="copy-btn" type="button" data-copy="국민 640402-04-158411">복사</button>
           </div>
         </div>
       </details>
@@ -1464,21 +1457,21 @@
           <div class="who-line"><span class="who-role">아버지</span><b class="who-nm">남성우</b></div>
           <div class="acct-box">
             <span class="num"><span class="bank">우리</span>121-08-431259</span>
-            <button class="ico" type="button" aria-label="계좌번호 복사" data-copy="우리 121-08-431259"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H4.5A1.5 1.5 0 0 1 3 13.5V4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V6"/></svg></button>
+            <button class="copy-btn" type="button" data-copy="우리 121-08-431259">복사</button>
           </div>
         </div>
         <div class="acct2">
           <div class="who-line"><span class="who-role">어머니</span><b class="who-nm">노진숙</b></div>
           <div class="acct-box">
             <span class="num"><span class="bank">농협</span>387-12-005701</span>
-            <button class="ico" type="button" aria-label="계좌번호 복사" data-copy="농협 387-12-005701"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H4.5A1.5 1.5 0 0 1 3 13.5V4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V6"/></svg></button>
+            <button class="copy-btn" type="button" data-copy="농협 387-12-005701">복사</button>
           </div>
         </div>
         <div class="acct2">
           <div class="who-line"><span class="who-role">신부</span><b class="who-nm">남유선</b></div>
           <div class="acct-box">
             <span class="num"><span class="bank">국민</span>594401-04-149359</span>
-            <button class="ico" type="button" aria-label="계좌번호 복사" data-copy="국민 594401-04-149359"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M6 15H4.5A1.5 1.5 0 0 1 3 13.5V4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V6"/></svg></button>
+            <button class="copy-btn" type="button" data-copy="국민 594401-04-149359">복사</button>
           </div>
         </div>
       </details>
