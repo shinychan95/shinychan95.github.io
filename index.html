@@ -579,38 +579,6 @@
     transform: scale(.97);
   }
 
-  /* ======================= OUR STORY — 블로그 (블러시2) ======================= */
-  #archive { background: var(--lt); padding: 96px 24px; text-align: center; }
-  #archive .desc { margin: 0 auto 26px; }
-  #archive .desc span { display: block; white-space: nowrap; font-size: calc(clamp(12px, 3.4vw, 14px) * var(--fit)); color: var(--soft); line-height: 2; }
-  #archive .desc .hl { color: var(--ink); font-weight: 400; }
-  .blog-card {
-    max-width: 380px; margin: 0 auto;
-    background: var(--paper);
-    border-radius: 14px;
-    padding: 26px 24px;
-    box-shadow: 0 14px 30px -18px rgba(59, 47, 30, .35);
-    text-align: left;
-    display: block;
-  }
-  .blog-card .bk {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    font-family: var(--display); font-weight: 500; font-size: calc(11px * var(--fit)); letter-spacing: .34em; color: var(--rose-ink);
-  }
-  .blog-card .bk svg { width: 15px; height: 15px; flex: none; opacity: .75; }
-  .blog-card .bt { font-family: var(--serif-kr); font-weight: 700; font-size: calc(17px * var(--fit)); margin-top: 10px; line-height: 1.6; }
-  .blog-card .bd { font-size: calc(12.5px * var(--fit)); color: var(--soft); margin-top: 7px; line-height: 1.75; word-break: keep-all; }
-  .blog-card .go {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    margin-top: 16px; padding-top: 13px;
-    border-top: 1px dashed var(--line);
-    font-size: calc(12.5px * var(--fit)); letter-spacing: .02em;
-  }
-  .blog-card .bhost { font-family: var(--mono); font-size: calc(11px * var(--fit)); color: var(--faint); }
-  .blog-card .bcta { color: var(--rose-ink); font-weight: 400; }
-  .blog-card.ready .bcta::after { content: " →"; }
-  .blog-card:active { transform: scale(.985); }
-
   /* ======================= 안내 — 항목별 독립 섹션 (페이퍼) ======================= */
   .info-sec { background: var(--lt); padding: 82px 24px 6px; text-align: center; }
   .info-sec:last-of-type { padding-bottom: 76px; }
@@ -1202,37 +1170,6 @@
     <p class="reel-hint">옆으로 넘겨보세요 &middot; 탭하면 크게 볼 수 있어요</p>
   </section>
 
-  <!-- ======================= OUR STORY (블로그) ======================= -->
-  <section id="archive">
-    <div class="label" data-reveal>
-      <svg class="laurel" viewBox="0 0 80 34" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
-        <path d="M12 28 C20 30 32 30 40 27" /><path d="M68 28 C60 30 48 30 40 27" />
-        <path d="M14 27 C13 23 15 20 18 19" /><path d="M20 25 C19 21 21 18 24 17" /><path d="M27 24 C26 20 28 17 31 16" /><path d="M34 23 C33 19 35 16 38 15" />
-        <path d="M66 27 C67 23 65 20 62 19" /><path d="M60 25 C61 21 59 18 56 17" /><path d="M53 24 C54 20 52 17 49 16" /><path d="M46 23 C47 19 45 16 42 15" />
-      </svg>
-      <span class="t">OUR STORY</span>
-    </div>
-    <p class="desc" data-reveal style="--d:.1s">
-      <span>어떻게 만나 여기까지 왔는지,</span>
-      <span class="hl">블로그에 긴 글로 적어두었습니다.</span>
-    </p>
-    <!-- TODO(블로그): href를 실제 블로그 글 주소로 교체하고, .bhost 도메인도 맞춰 주세요 -->
-    <a class="blog-card" href="#" id="blogLink" target="_blank" rel="noopener" data-reveal style="--d:.2s" aria-disabled="true">
-      <p class="bk">
-        <span>BLOG POST</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14 4h6v6M20 4 11 13M18 14v5a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19V8.2A1.6 1.6 0 0 1 5.6 6.6H10"/>
-        </svg>
-      </p>
-      <p class="bt">찬영과 유선의 지난 이야기</p>
-      <p class="bd" data-wrap>처음 만난 날부터 청혼까지, 사진과 함께 적은 기록이에요.</p>
-      <p class="go" id="blogGo">
-        <span class="bhost">shinychan95.com</span>
-        <span class="bcta">준비 중이에요 &mdash; 곧 열립니다</span>
-      </p>
-    </a>
-  </section>
-
   <!-- ======================= 안내 ======================= -->
   <!-- ======================= 예식 일시 ======================= -->
   <section id="date" class="info-sec">
@@ -1706,7 +1643,7 @@
      캡션이 접힌다 — 여유가 거의 없다.
      그래서 폭이나 배율을 추측하지 않고, 실제로 그려진 걸 재서 접히거나 화면 밖으로
      나간 줄이 하나라도 있으면 --fit을 내려 글자를 그만큼만 줄인다.
-     일부러 여러 줄로 흐르는 글(.bd 같은 카드 설명)은 [data-wrap]으로 빼 둔다. */
+     일부러 여러 줄로 흐르는 글은 [data-wrap]으로 빼 둔다. */
   /* 화면이 좁은 데다(디스플레이 확대) 글자 크기까지 올려 둔 경우를 함께 감당할
      만큼은 내려간다. 여기까지 줄여도 안 되면 그때는 줄이 접히게 둔다 —
      글자를 더 줄여 안 보이게 만드는 것보다는 낫다. */
@@ -2076,23 +2013,6 @@
   document.getElementById('linkBtn').addEventListener('click', function () {
     copy(location.href, '링크가 복사되었습니다');
   });
-
-  /* 블로그 링크 — href가 '#'인 동안은 준비 중 안내, 주소가 채워지면 CTA를 바꾼다 */
-  var blogLink = document.getElementById('blogLink');
-  if (blogLink.getAttribute('href') === '#') {
-    blogLink.removeAttribute('target');
-    blogLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      toast('이야기는 곧 열릴 예정이에요');
-    });
-  } else {
-    blogLink.classList.add('ready');
-    blogLink.removeAttribute('aria-disabled');
-    document.querySelector('#blogGo .bcta').textContent = '블로그에서 읽기';
-    try {
-      document.querySelector('#blogGo .bhost').textContent = new URL(blogLink.href).hostname.replace(/^www\./, '');
-    } catch (e) {}
-  }
 
   /* ESC로 오버레이 닫기 */
   document.addEventListener('keydown', function (e) {
