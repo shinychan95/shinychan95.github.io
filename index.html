@@ -800,13 +800,13 @@
     mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
   }
   .credits .roll { display: grid; gap: 40px; transform: translateY(350px); }
-  footer.rolling .credits .roll { animation: credits-roll 38s linear .4s forwards; }
-  /* 마지막 블록(함께해 주세요)이 화면에 남은 채로 멈춘다 */
+  footer.rolling .credits .roll { animation: credits-roll 26s linear .4s forwards; }
+  /* 마지막 블록(COMING SOON)이 화면에 남은 채로 멈춘다 */
   @keyframes credits-roll {
     from { transform: translateY(350px); }
     to   { transform: translateY(calc(-100% + 210px)); }
   }
-  /* 라벨은 "누구에게 왜 감사한지"를 한국어로 — 영화 직함(EXECUTIVE PRODUCERS 등)은 부모님에게 붙이기 어색해 반려 */
+  /* 라벨은 한국어 직함 + 영문 관용구(SPECIAL THANKS TO, COMING SOON) 혼용 — 한 서체로 통일 */
   .cr .ck { font-family: var(--sans); font-size: calc(11px * var(--fit)); letter-spacing: .12em; text-indent: .12em; color: var(--soft-onblk); white-space: nowrap; }
   .cr .cv { font-family: var(--serif-kr); font-size: calc(15.5px * var(--fit)); line-height: 1.9; color: var(--ink-onblk); margin-top: 8px; }
   .cr .cv i { font-family: var(--display); font-style: italic; font-weight: 400; letter-spacing: .06em; }
@@ -1426,14 +1426,11 @@
     <div class="credits" id="credits" data-reveal style="--d:.25s" aria-label="엔드 크레딧">
       <div class="roll">
         <div class="cr"><p class="ck">주연</p><p class="cv">김찬영 &middot; 남유선</p></div>
-        <div class="cr"><p class="ck">찬영이를 키워 주신</p><p class="cv">김대열 &middot; 채은희</p></div>
-        <div class="cr"><p class="ck">유선이를 키워 주신</p><p class="cv">남성우 &middot; 노진숙</p></div>
-        <div class="cr"><p class="ck">같은 해, 같은 곳에서 일하게 해 준</p><p class="cv">회사</p></div>
-        <div class="cr"><p class="ck">두 사람이 처음 마주친</p><p class="cv">그날의 건강검진 대기실</p></div>
+        <div class="cr"><p class="ck">총괄 프로듀서</p><p class="cv">김대열 &middot; 채은희<br>남성우 &middot; 노진숙</p></div>
+        <div class="cr"><p class="ck">출연</p><p class="cv">그동안 두 사람의 장면마다<br>함께해 주신 모든 분들</p></div>
         <div class="cr"><p class="ck">음악</p><p class="cv"><i>Mid Air</i><br>피아노 &mdash; 남유선</p></div>
-        <div class="cr"><p class="ck">두 사람의 장면마다 함께 출연해 주신</p><p class="cv">모든 분들</p></div>
-        <div class="cr"><p class="ck">마지막 줄까지 읽어 주신</p><p class="cv">당신</p></div>
-        <div class="cr"><p class="ck">함께해 주세요</p><p class="cv">2026. 11. 01. 오전 11시<br>노블발렌티 삼성</p></div>
+        <div class="cr"><p class="ck">SPECIAL THANKS TO</p><p class="cv">마지막 줄까지 읽어 주신<br>당신</p></div>
+        <div class="cr"><p class="ck">COMING SOON</p><p class="cv">2026. 11. 01. 오전 11시<br>노블발렌티 삼성</p></div>
       </div>
     </div>
     <p class="sig" data-reveal style="--d:.35s">Chanyoung &amp; Yoosun</p>
