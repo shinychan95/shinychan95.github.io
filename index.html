@@ -74,6 +74,12 @@
     /* 글자 배율. 손으로 끊어 둔 줄이 접히거나 화면 밖으로 잘리면
        JS가 이 값을 1 아래로 내려 글자를 그만큼 줄인다. 아래 fitText() 참고. */
     --fit: 1;
+    /* 서장(손글씨·열기 버튼) 전용 배율. 본문의 --fit과 따로 재는 이유는
+       fitText()가 서장을 재는 대상에서 빼 두었기 때문이다 — 본문 때문에 내려간
+       값을 서장까지 뒤집어쓰면, 멀쩡히 한 줄로 들어가는 손글씨가 까닭 없이
+       작아진다. 게다가 그 계산은 폰트가 다 온 뒤에 끝나므로 타이핑 도중에
+       글자가 줄어든다. 아래 fitPrologue() 참고. */
+    --fit-hw: 1;
   }
   @supports (height: 100svh) {
     :root { --vph: 100svh; }
@@ -200,7 +206,7 @@
   .hw-wrap { display: grid; gap: 4px; text-align: center; }
   .hw {
     font-family: var(--pen);
-    font-size: calc(clamp(27px, 7.6vw, 38px) * var(--fit));
+    font-size: calc(clamp(27px, 7.6vw, 38px) * var(--fit-hw));
     line-height: 1.55;
     min-height: 1.55em;
   }
@@ -217,7 +223,7 @@
   .btn-slot { margin-top: 48px; opacity: 0; }
   .btn-face {
     display: block;
-    font-size: calc(14px * var(--fit)); font-weight: 400; line-height: 1.5;
+    font-size: calc(14px * var(--fit-hw)); font-weight: 400; line-height: 1.5;
     letter-spacing: .18em; text-indent: .18em;
     color: var(--paper);
     background: var(--ink);
@@ -254,7 +260,7 @@
   }
   #bgmChip:active { transform: scale(.92); }
   #bgmChip .bars { display: flex; align-items: flex-end; gap: 2.5px; height: 12px; }
-  #bgmChip .bars i { width: 2px; height: 5px; background: currentColor; border-radius: 1px; }
+  #bgmChip .bars i { width: 2px; height: 12px; background: currentColor; border-radius: 1px; transform: scaleY(.42); transform-origin: bottom; }
   #bgmChip::after {
     content: ""; position: absolute;
     width: 20px; height: 1.5px; border-radius: 1px;
@@ -267,7 +273,7 @@
   #bgmChip.playing .bars i { animation: eq 1s ease-in-out infinite; }
   #bgmChip.playing .bars i:nth-child(2) { animation-delay: .2s; }
   #bgmChip.playing .bars i:nth-child(3) { animation-delay: .45s; }
-  @keyframes eq { 0%, 100% { height: 5px; } 50% { height: 12px; } }
+  @keyframes eq { 0%, 100% { transform: scaleY(.42); } 50% { transform: scaleY(1); } }
   #bgmChip.blocked { animation: nudge 2.4s ease-in-out infinite; }
   @keyframes nudge { 0%, 100% { box-shadow: 0 0 0 0 rgba(196,106,126,0); } 50% { box-shadow: 0 0 0 7px rgba(196,106,126,.13); } }
 
@@ -706,6 +712,14 @@
     display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
     gap: 10px; margin-top: 10px; font-size: calc(12.5px * var(--fit)); color: var(--soft);
   }
+  .v-note {
+    margin: 14px auto 0; padding: 10px 12px; max-width: 320px;
+    background: rgba(196, 106, 126, .07); background: color-mix(in srgb, var(--rose) 7%, transparent);
+    border-radius: 10px; line-height: 1.8;
+  }
+  .v-note span { display: block; white-space: nowrap; font-size: calc(clamp(11.5px, 3.5vw, 13px) * var(--fit)); }
+  .v-note .ln1 { color: var(--ink); }
+  .v-note .ln2 { color: var(--rose-ink); }
   .ways { list-style: none; display: grid; gap: 20px; margin-top: 22px; text-align: left; }
   .ways li { display: flex; gap: 13px; align-items: flex-start; }
   .w-ico {
@@ -874,8 +888,13 @@
   @media (hover: hover) and (pointer: fine) { .lb-nav { display: block; } }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
-    .hw span, .fx, #openBtn, [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
+    /* 되풀이 횟수까지 1로 못 박는다. 0.01초만 주고 infinite를 그대로 두면
+       애니메이션이 초당 100번 되감기며 깜빡인다 — BGM 버튼의 이퀄라이저가 그랬다. */
+    *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01s !important; }
+    .hw span, .fx, [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
+    #bgmChip.playing .bars i, #bgmChip.blocked { animation: none !important; }
+    /* 한 번만 돌고 끝나면 사라지므로, 멈춘 모습으로 세워 둔다 */
+    .writing .arr { animation: none !important; opacity: .5; }
     html { scroll-behavior: auto; }
     /* 크레딧은 정지 목록으로, 스틸은 컬러로 */
     .credits { height: auto; -webkit-mask-image: none; mask-image: none; }
@@ -913,7 +932,8 @@
       </div>
     </div>
   </div>
-  <button id="openBtn" type="button">청첩장 열기</button>
+  <!-- 보이는 버튼 위에 얹는 터치 전용 판. 글자는 aria-label로만 두어, 어떤 경우에도 화면에 나오지 않는다 -->
+  <button id="openBtn" type="button" aria-label="청첩장 열기"></button>
 </div>
 
 <button id="bgmChip" type="button" aria-label="배경음악 켜기/끄기" aria-pressed="false">
@@ -1117,12 +1137,18 @@
       </div>
       <div class="shot">
         <div class="fr">
-          <img src="assets/photos/scene2-8.jpg" class="fit" alt="정장과 드레스를 입고 꽃을 든 네 컷 사진" loading="lazy" decoding="async">
+          <img src="assets/photos/scene2-8.jpg" alt="바닷속에서 나란히 헤엄치며 손을 흔드는 두 사람" loading="lazy" decoding="async">
+          <span class="grain" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="shot">
+        <div class="fr">
+          <img src="assets/photos/scene2-9.jpg" class="fit" alt="정장과 드레스를 입고 꽃을 든 네 컷 사진" loading="lazy" decoding="async">
           <span class="grain" aria-hidden="true"></span>
         </div>
       </div>
     </figure>
-    <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="cap" data-reveal style="--d:.15s">
       <p>눈이 오면 눈사람을 만들고<br>
         봄이 오면 자전거를 탔습니다.<br>
@@ -1226,6 +1252,11 @@
           <span>서울 강남구 봉은사로 637</span>
           <button class="copy-btn" type="button" data-copy="서울 강남구 봉은사로 637">주소 복사</button>
         </p>
+        <!-- 이름 때문에 삼성역으로 가시는 분이 없도록 — 틀리기 쉬운 곳(대치점)을 이름으로 짚어 준다 -->
+        <p class="v-note">
+          <span class="ln1">이름은 삼성이지만 봉은사역이 가깝습니다</span>
+          <span class="ln2">삼성역 옆 노블발렌티 대치점이 아닙니다</span>
+        </p>
       </div>
 
       <!-- 약도: 수도빌딩(제2주차장)은 봉은사역 사거리 남동쪽 모서리, 봉은사로에 바로 붙어 있다.
@@ -1246,14 +1277,14 @@
           <circle cx="61" cy="111" r="10" fill="#BDA25C"/>
           <text class="onpin" x="61" y="114.5" text-anchor="middle" font-weight="700">9</text>
           <text x="44" y="139" text-anchor="end">봉은사역</text>
-          <!-- 4번 출구에서 예식장까지 -->
+          <!-- 4번 출구에서 예식장까지 — 실제로 출구에서 봉은사로를 따라 오른쪽(동쪽)으로 직진 -->
           <circle cx="88" cy="94" r="3.4" fill="var(--rose)"/>
-          <text class="accent" x="96" y="86" text-anchor="start">4번 출구</text>
-          <path class="walk" d="M94 92 C 140 89, 190 82, 232 72"/>
-          <text class="accent" x="172" y="74" text-anchor="middle">도보 5분</text>
+          <text class="accent" x="92" y="84" text-anchor="start">4번 출구</text>
+          <path class="walk" d="M94 94 H 242"/>
+          <text class="accent" x="176" y="86" text-anchor="middle">도보 5분</text>
           <!-- 예식장 -->
-          <text class="venue-nm" x="248" y="28" text-anchor="middle">노블발렌티 삼성</text>
-          <g transform="translate(248 56)">
+          <text class="venue-nm" x="248" y="42" text-anchor="middle">노블발렌티 삼성</text>
+          <g transform="translate(248 74)">
             <path d="M0 20 C -10 8, -13 -2, -13 -6 A 13 13 0 1 1 13 -6 C 13 -2, 10 8, 0 20 Z" fill="var(--rose)"/>
             <text class="onpin" y="-2" text-anchor="middle">&#9829;</text>
           </g>
@@ -1265,9 +1296,9 @@
       </figure>
 
       <div class="maps">
-        <a href="https://map.naver.com/p/search/%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1" target="_blank" rel="noopener">네이버지도</a>
-        <a href="https://map.kakao.com/?q=%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1" target="_blank" rel="noopener">카카오맵</a>
-        <a href="tmap://search?name=%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1">티맵</a>
+        <a href="https://naver.me/5uIYZdsZ" target="_blank" rel="noopener">네이버지도</a>
+        <a href="https://map.kakao.com/link/map/17157328" target="_blank" rel="noopener">카카오맵</a>
+        <a href="tmap://route?goalname=%EB%85%B8%EB%B8%94%EB%B0%9C%EB%A0%8C%ED%8B%B0%20%EC%82%BC%EC%84%B1&amp;goalx=127.0648317&amp;goaly=37.51533422">티맵</a>
       </div>
 
       <ul class="ways">
@@ -1486,7 +1517,6 @@
     face.querySelector('.btn-slot').style.animationDelay = (delay + 0.15).toFixed(2) + 's';
     face.querySelector('.arr').style.animationDelay = (delay + 0.6).toFixed(2) + 's';
   });
-  requestAnimationFrame(function () { prologue.classList.add('writing'); });
 
   /* 실제 터치 영역을 '보이는 버튼' 위에 정확히 얹는다 (버튼은 접힌 선에서 갈라져 있다) */
   var btnFace = document.querySelector('.door.l .btn-face');
@@ -1503,11 +1533,43 @@
   document.querySelector('.door.l .btn-slot').addEventListener('animationend', placeHit);
 
   function armOpenBtn() { placeHit(); openBtn.style.pointerEvents = 'auto'; }
-  var armTimer = setTimeout(armOpenBtn, (delay + 0.4) * 1000);
+  var armTimer = null;
+
+  /* 쓰기 시작 — 글자 크기를 먼저 확정하고 나서.
+     손글씨의 폭은 펜 글씨체가 와야 정해진다. 그 전에 쓰기 시작하면 글씨체가 도착하는
+     순간(대개 첫 줄과 둘째 줄 사이) 크기가 한 번 바뀐다 — 카카오톡 인앱 브라우저에서
+     "잘 지내셨나요?" 다음에 글자가 작아지던 게 이것이다.
+     document.fonts.ready는 이 페이지가 쓰는 글씨체 여섯 벌을 다 기다리므로 너무 늦다.
+     서장에 필요한 건 펜 글씨체 한 벌이니 그것만, 실제로 쓸 글자까지 넘겨 기다린다
+     (구글 폰트는 글자 범위별로 파일이 갈려 있어 글자를 줘야 한글 파일을 받는다).
+     끝내 안 오면 1.5초에 있는 글씨체로 시작한다. 대체 글씨체는 펜 글씨체보다 넓으니
+     그 폭으로 잰 크기는 줄이 접히지 않는 쪽으로만 틀린다 — 다시 재지 않고 그대로 둔다.
+     한 번 쓰기 시작한 뒤로는 크기가 바뀌지 않는 편이 낫다. */
+  var writingStarted = false;
+  function startWriting() {
+    if (writingStarted) return;
+    writingStarted = true;
+    fitPrologue();
+    prologue.classList.add('writing');
+    armTimer = setTimeout(armOpenBtn, (delay + 0.4) * 1000);
+  }
+  var penWait = null;
+  if (document.fonts && document.fonts.load) {
+    var penText = '';
+    document.querySelectorAll('.door.l .hw').forEach(function (line) { penText += line.getAttribute('data-text'); });
+    try { penWait = document.fonts.load('38px "Nanum Pen Script"', penText); } catch (e) { penWait = null; }
+  }
+  if (penWait) {
+    penWait.then(startWriting, startWriting);
+    setTimeout(startWriting, 1500);
+  } else {
+    requestAnimationFrame(startWriting);
+  }
 
   /* 문을 누르면 손글씨를 건너뛴다 */
   prologue.addEventListener('pointerdown', function (e) {
     if (e.target === openBtn) return;
+    startWriting(); /* 폰트를 기다리는 중이었다면 지금 띄운다 */
     prologue.classList.add('done');
     clearTimeout(armTimer);
     armOpenBtn();
@@ -1706,6 +1768,36 @@
     }
   }
 
+  /* ---------- 서장은 서장의 자로 잰다 ----------
+     fitText()는 서장을 재는 대상에서 빼 두었다(문이 열리면 사라지는 데다, 양쪽 문에
+     같은 글이 두 벌 들어 있어 화면 밖으로 나가 있는 게 정상이다). 그런데 --fit은
+     :root에 걸리므로, 본문 때문에 내려간 값을 서장까지 그대로 뒤집어썼다. 그래서
+     서장 몫은 --fit-hw로 따로 재고 따로 내린다.
+     재는 방법도 다르다. 손글씨는 글자 하나하나가 기울고 떠오르는 중이라 글자 단위로
+     재면 그 변형을 줄 바뀜으로 오인한다. 변형은 배치를 바꾸지 않으므로, 줄(<p>)이
+     한 줄보다 높아졌는지만 본다. */
+  function prologueWrapped() {
+    var lines = document.querySelectorAll('.door.l .hw');
+    for (var i = 0; i < lines.length; i++) {
+      var lh = parseFloat(getComputedStyle(lines[i]).lineHeight);
+      if (lh && lines[i].getBoundingClientRect().height > lh * 1.5) return true;
+    }
+    return false;
+  }
+
+  function fitPrologue() {
+    var css = document.documentElement.style;
+    css.setProperty('--fit-hw', '1');
+    if (!prologueWrapped()) return;
+    var lo = FIT_MIN, hi = 1;
+    for (var i = 0; i < 7; i++) {
+      var m = (lo + hi) / 2;
+      css.setProperty('--fit-hw', m.toFixed(4));
+      if (prologueWrapped()) hi = m; else lo = m;
+    }
+    css.setProperty('--fit-hw', lo.toFixed(4));
+  }
+
   /* 글자 폭은 폰트가 다 와야 확정된다 */
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitText);
   else window.addEventListener('load', fitText);
@@ -1714,7 +1806,7 @@
     if (window.innerWidth === fitW) return; /* 인앱 툴바 접힘은 폭이 그대로다 */
     fitW = window.innerWidth;
     clearTimeout(fitTimer);
-    fitTimer = setTimeout(fitText, 150);
+    fitTimer = setTimeout(function () { fitText(); fitPrologue(); }, 150);
   });
 
   /* ---------- 대문: 그림 ↔ 사진 자동 교차, 꽃잎 ---------- */
