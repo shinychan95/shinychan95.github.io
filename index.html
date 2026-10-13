@@ -565,6 +565,11 @@
     width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
     background: #26221C;
   }
+  /* PC에서는 마우스로 잡아 끌어 넘긴다(JS: mouseDrag). 터치는 원래 되므로 마우스가 있을 때만 손 모양 */
+  @media (hover: hover) and (pointer: fine) {
+    .scene .still, .reel, #lightbox .strip { cursor: grab; }
+  }
+  .grabbing, .grabbing * { cursor: grabbing !important; -webkit-user-select: none; user-select: none; }
   .reel-hint { font-family: var(--sans); font-weight: 400; font-size: calc(11.5px * var(--fit)); letter-spacing: .14em; color: var(--faint); margin-top: 6px; }
   .g-actions { display: flex; justify-content: center; gap: 12px; margin-top: 26px; }
   .txt-btn {
@@ -1919,6 +1924,97 @@
     }
   }
 
+  /* ---------- 마우스로 끌어 넘기기 (PC) ----------
+     가로 트랙은 손가락·트랙패드로는 넘어가지만 마우스로는 끌리지 않는다. 마우스일 때만
+     scrollLeft를 직접 옮기고, 놓으면 그때 속도만큼 조금 더 미끄러진 자리에서 가장 가까운
+     컷으로 붙인다. 끄는 동안과 붙는 동안은 스냅을 꺼 둔다 — 켜 두면 scrollLeft를 줄 때마다
+     제자리로 튕기고, 붙는 도중에 켜면 그 자리에서 가까운 컷으로 튄다.
+     끌다 놓은 자리에서 나는 click은 삼킨다(갤러리 액자를 끌다 놓으면 크게 보기가 열린다). */
+  function mouseDrag(el, onRelease) {
+    var x0 = 0, left0 = 0, lastX = 0, lastT = 0, v = 0, down = false, moved = false, settle = null;
+    /* 이 위치로 스크롤하면 c가 트랙 한가운데 온다 */
+    var centerOf = function (c, box) {
+      var r = c.getBoundingClientRect();
+      return el.scrollLeft + r.left + r.width / 2 - box.left - el.clientWidth / 2;
+    };
+    var resnap = function () {
+      clearTimeout(settle);
+      settle = setTimeout(function () {
+        el.removeEventListener('scroll', resnap);
+        el.style.scrollSnapType = '';
+      }, 140);
+    };
+    var waitResnap = function () {
+      el.addEventListener('scroll', resnap, { passive: true });
+      resnap();
+    };
+    var onMove = function (e) {
+      if (!moved) {
+        if (Math.abs(e.clientX - x0) < 5) return;
+        moved = true;
+        /* 붙는 중이던 스크롤이 있으면 여기서 멈춘 자리부터 잡는다 */
+        x0 = lastX = e.clientX; lastT = e.timeStamp;
+        left0 = el.scrollLeft;
+        el.style.scrollSnapType = 'none';
+        el.classList.add('grabbing');
+        if (window.getSelection) window.getSelection().removeAllRanges();
+      }
+      if (e.timeStamp > lastT) v = (e.clientX - lastX) / (e.timeStamp - lastT);
+      lastX = e.clientX; lastT = e.timeStamp;
+      el.scrollLeft = left0 - (e.clientX - x0);
+    };
+    var onUp = function (e) {
+      if (!down) return;
+      down = false;
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+      if (!moved) {
+        /* 붙는 도중에 눌렀다 뗀 것뿐이면 미뤄 둔 스냅 복구만 다시 건다 */
+        if (el.style.scrollSnapType === 'none') waitResnap();
+        return;
+      }
+      el.classList.remove('grabbing');
+      el.scrollLeft = left0 - (e.clientX - x0);
+      if (e.timeStamp - lastT > 80) v = 0;   // 멈췄다가 놓았다
+      var box = el.getBoundingClientRect();
+      var cs = [].slice.call(el.children);
+      var ps = cs.map(function (c) { return centerOf(c, box); });
+      var nearest = function (x) {
+        var k = 0;
+        for (var i = 1; i < ps.length; i++) if (Math.abs(ps[i] - x) < Math.abs(ps[k] - x)) k = i;
+        return k;
+      };
+      var clamp = function (i, a, b) { return Math.max(a, Math.min(b, i)); };
+      /* 휙 던지면 한 장 더 — 하지만 놓은 자리에서 한 장을 넘지는 않는다 */
+      var near = nearest(el.scrollLeft);
+      var best = clamp(nearest(el.scrollLeft - clamp(v, -3, 3) * 180), near - 1, near + 1);
+      var from = nearest(left0), dx = e.clientX - x0;
+      /* 조금만 끌어도 넘어가게 — 제자리로 돌아오면 안 끌린 것처럼 느껴진다 */
+      if (best === from && Math.abs(dx) > 40) best = from + (dx < 0 ? 1 : -1);
+      best = clamp(best, 0, cs.length - 1);
+      var to = clamp(ps[best], 0, el.scrollWidth - el.clientWidth);
+      el.scrollTo({ left: to, behavior: 'smooth' });
+      waitResnap();
+      var swallow = function (ev) { ev.stopPropagation(); ev.preventDefault(); };
+      el.addEventListener('click', swallow, true);
+      setTimeout(function () { el.removeEventListener('click', swallow, true); }, 0);
+      if (onRelease) onRelease();
+    };
+    el.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true; moved = false; v = 0;
+      x0 = e.clientX;
+      clearTimeout(settle);
+      el.removeEventListener('scroll', resnap);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
+    });
+    /* 사진을 끌면 브라우저가 이미지 끌어 놓기를 시작해 버린다 */
+    el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  }
+
   /* ---------- SCENE: 컷이 가로로 넘어간다 (자동 + 손으로) ----------
      화면에 들어와 있을 때만 돈다. 안 보이는 동안 돌면 다시 왔을 때 엉뚱한 컷에 가 있다.
      손가락이 닿는 순간 타이머를 놓고, 스크롤이 멎으면 그 자리에서 다시 센다. */
@@ -1953,6 +2049,7 @@
       stop();
       clearTimeout(idle);
       idle = setTimeout(function () {
+        if (still.classList.contains('grabbing')) return;  // 마우스로 쥔 채 멈춘 것 — 놓을 때 다시 센다
         var w = still.clientWidth || 1;
         at = Math.max(0, Math.min(shots.length - 1, Math.round(still.scrollLeft / w)));
         mark();
@@ -1963,6 +2060,7 @@
     still.addEventListener('scroll', onScroll, { passive: true });
     still.addEventListener('pointerdown', grab, { passive: true });
     still.addEventListener('touchstart', grab, { passive: true });
+    mouseDrag(still, onScroll);
     window.addEventListener('resize', function () {
       /* 폭이 바뀌면 스냅 위치가 어긋난다. 지금 컷으로 조용히 다시 맞춘다 */
       autoUntil = Date.now() + 400;
@@ -2011,6 +2109,7 @@
     b.addEventListener('click', function () { openLightbox(i); });
     reel.appendChild(b);
   });
+  mouseDrag(reel);
   /* 데스크톱: 세로 휠을 가로 스크롤로 */
   reel.addEventListener('wheel', function (e) {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -2055,6 +2154,7 @@
   function lbGo(dir) {
     strip.scrollBy({ left: dir * strip.clientWidth, behavior: 'smooth' });
   }
+  mouseDrag(strip);
   document.getElementById('lbPrev').addEventListener('click', function () { lbGo(-1); });
   document.getElementById('lbNext').addEventListener('click', function () { lbGo(1); });
   strip.addEventListener('wheel', function (e) {
